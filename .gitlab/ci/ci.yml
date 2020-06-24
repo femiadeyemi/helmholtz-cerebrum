@@ -1,0 +1,8 @@
+ci_build:
+    only:
+        - master
+        - tags
+        - merge_requests
+    stage: build
+    image: maven:3-jdk-11
+    script: "mvn -B package --file pom.xml"

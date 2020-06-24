@@ -1,0 +1,20 @@
+stages:
+    - build
+    - test
+    - pre_package
+    - package
+    - deploy
+
+variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+    DOCKER_IMAGE_TAGGED: helmholtzcloud/cerebrum:$CI_COMMIT_SHA
+    DOCKER_IMAGE_LATEST: helmholtzcloud/cerebrum:latest
+
+cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+        - ".m2/repository"
+
+include:
+    - local: .gitlab/ci/ci.yml
+    - local: .gitlab/ci/create-docker-image-ci.yml

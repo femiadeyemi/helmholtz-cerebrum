@@ -1,0 +1,36 @@
+maven_build:
+    only:
+        - master
+        - tags
+        - merge_requests
+    stage: pre_package
+    dependencies:
+        - ci_build
+    image: maven:3-jdk-11
+    script: "mvn install"
+    artifacts:
+        paths:
+            - "target/*.jar"
+        expire_in: 600 seconds
+    tags:
+        - "docker"
+
+docker_push:
+    only:
+        - master
+    stage: package
+    image: docker:19.03.11
+    services:
+        - name: docker:19.03.11-dind
+          alias: docker
+    before_script:
+        - docker info
+    script:
+        - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        - docker build -t $DOCKER_IMAGE_LATEST .
+#        - docker build -t $DOCKER_IMAGE_TAGGED .
+#        - docker push $DOCKER_IMAGE_TAGGED
+#        - docker tag $DOCKER_IMAGE_TAGGED $DOCKER_IMAGE_LATEST
+        - docker push $DOCKER_IMAGE_LATEST
+    dependencies:
+        - maven_build
