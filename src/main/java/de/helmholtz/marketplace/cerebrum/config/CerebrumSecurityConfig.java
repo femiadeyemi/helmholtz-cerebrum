@@ -23,7 +23,7 @@ public class CerebrumSecurityConfig extends WebSecurityConfigurerAdapter
                 .mvcMatcher("/**")
                 .authorizeRequests()
                     .mvcMatchers("/api/v0/admin/**").hasRole("ADMIN")
-                    .mvcMatchers("/api/v0/**").permitAll()
+                    .mvcMatchers("/", "/swagger-ui/**", "/api/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
@@ -33,7 +33,8 @@ public class CerebrumSecurityConfig extends WebSecurityConfigurerAdapter
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("${cerebrum.allowed.client.origins}"));
-        configuration.setAllowedMethods(Arrays.asList("GET","DELETE","PUT","POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "DELETE", "PUT", "POST", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

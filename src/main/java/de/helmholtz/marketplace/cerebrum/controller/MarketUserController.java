@@ -1,10 +1,15 @@
 package de.helmholtz.marketplace.cerebrum.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
 import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -29,7 +34,21 @@ public class MarketUserController
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/whoami")
+    @GetMapping(path = "/whoami", produces = {"application/json"})
+    @Operation(
+            summary = "display user information",
+            description = "This display an authenticated End-User user details " +
+                    "in JSON format. The result shown is by querying the UserInfo " +
+                    "endpoint of HDF AAI.",
+            security = @SecurityRequirement(name = "hdf-aai"),
+            responses= {
+                    @ApiResponse(responseCode = "200", description = "Success",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = MarketUser.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorised"),
+                    @ApiResponse(responseCode = "500", description = "Server Error")
+            }
+    )
     public JsonNode whoami() {
         return this.authorisationServer
                 .get()
