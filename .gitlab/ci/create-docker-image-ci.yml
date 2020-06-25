@@ -34,3 +34,6 @@ docker_push:
         - docker push $DOCKER_IMAGE_LATEST
     dependencies:
         - maven_build
+    tags:
+        - "docker"
+
