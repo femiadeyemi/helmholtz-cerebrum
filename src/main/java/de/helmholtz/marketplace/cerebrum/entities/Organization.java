@@ -6,20 +6,24 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
-@NodeEntity
-public class Organization {
+import de.helmholtz.marketplace.cerebrum.utils.CerebrumIdGenerator;
 
+import static de.helmholtz.marketplace.cerebrum.utils.CerebrumIdGenerator.generate;
+
+@NodeEntity(label = "Organization")
+public class Organization
+{
     @Schema(description = "Unique identifier of the organisation",
-            example = "0", required = true)
+            example = "org-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = CerebrumIdGenerator.class)
+    private String uuid;
 
     @Schema(description = "Name of the organisation in full",
             example = "Deutsches Elektronen-Synchrotron", required = true)
-    @NotNull
+    @NotBlank
     private String name;
 
     @Schema(description = "The shortened form of an organisation's name - this " +
@@ -35,15 +39,18 @@ public class Organization {
     @Schema(description = "The organisation web address",
             example = "https://www.desy.de/", required = true)
     @URL(message = "Web address")
-    @NotNull
+    @NotBlank
     private String url;
 
-    public Long getId() {
-        return id;
+    public String getUuid()
+    {
+        return uuid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUuid(String uuid)
+    {
+        this.uuid = Boolean.TRUE.equals(CerebrumIdGenerator.isValid(uuid)) ?
+                uuid : generate("org");
     }
 
     public String getName() {

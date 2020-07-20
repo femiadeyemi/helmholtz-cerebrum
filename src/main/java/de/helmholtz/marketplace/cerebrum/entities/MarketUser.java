@@ -9,12 +9,18 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import de.helmholtz.marketplace.cerebrum.utils.CerebrumIdGenerator;
+
+import static de.helmholtz.marketplace.cerebrum.utils.CerebrumIdGenerator.generate;
+
 @NodeEntity
 public class MarketUser
 {
     @Schema(description = "Unique identifier of the marketplace user.",
-            example = "1", required = true)
-    @Id @GeneratedValue private Long id;
+            example = "hmu-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
+    @Id
+    @GeneratedValue(strategy = CerebrumIdGenerator.class)
+    private String uuid;
 
     @Schema(description = "first name of the user.",
             example = "Paul", required = true)
@@ -44,6 +50,17 @@ public class MarketUser
             example = "110248495921238986420", required = true)
     @NotBlank
     private String sub;
+
+    public String getUuid()
+    {
+        return uuid;
+    }
+
+    public void setUuid(String uuid)
+    {
+        this.uuid = Boolean.TRUE.equals(CerebrumIdGenerator.isValid(uuid)) ?
+                uuid : generate("hmu");
+    }
 
     public String getFirstName() {
         return firstName;

@@ -1,6 +1,7 @@
 package de.helmholtz.marketplace.cerebrum.controller;
 
 import de.helmholtz.marketplace.cerebrum.entities.Organization;
+import de.helmholtz.marketplace.cerebrum.entities.assembler.OrganizationResourceAssembler;
 import de.helmholtz.marketplace.cerebrum.exception.OrganizationNotFoundException;
 import de.helmholtz.marketplace.cerebrum.repository.OrganizationRepository;
 
@@ -19,9 +20,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.lang.Nullable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,17 +42,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+@RequestMapping(produces = "application/prs.hal-forms+json",
         path = "${spring.data.rest.base-path}/organizations")
 @Tag(name = "organizations", description = "The Organization API")
 public class OrganizationController {
     private final OrganizationRepository organizationRepository;
+    private final OrganizationResourceAssembler assembler;
 
-    public OrganizationController(OrganizationRepository organizationRepository) {
+    public OrganizationController(
+            OrganizationRepository organizationRepository,
+            OrganizationResourceAssembler assembler)
+    {
         this.organizationRepository = organizationRepository;
+        this.assembler = assembler;
     }
 
     @Operation(summary = "get array list of all organisations")
@@ -58,16 +74,34 @@ public class OrganizationController {
             @ApiResponse(responseCode = "400", description = "invalid request")
     })
     @GetMapping(path = "")
-    public Iterable<Organization> getOrganizations(
+    public CollectionModel<EntityModel<Organization>> getOrganizations(
             @Parameter(description = "specify the page number")
-            @RequestParam(value = "page", defaultValue = "0") @Nullable Integer page,
+                @RequestParam(value = "page", defaultValue = "0") Integer page,
             @Parameter(description = "limit the number of records returned in one page")
-            @RequestParam(value = "size", defaultValue = "20") @Nullable Integer size) {
-        if (page != null && size != null) {
-            return organizationRepository.findAll(PageRequest.of(page, size));
-        } else {
-            return organizationRepository.findAll();
+                @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @Parameter(description = "")
+                @RequestParam(value = "sort", defaultValue = "name.desc") List<String> sorts)
+    {
+        List<Sort.Order> orders = new ArrayList<>();
+        for (String sort: sorts) {
+            if (sort.contains(".")) {
+                String[] order = sort.split("\\.");
+                orders.add(new Sort.Order(getSortDirection(order[1]), order[0]));
+            } else {
+                orders.add(new Sort.Order(getSortDirection("desc"), sort));
+            }
         }
+
+        List<EntityModel<Organization>> organizations =
+                organizationRepository.findAll(PageRequest.of(page, size, Sort.by(orders)))
+                        .stream()
+                        .map(assembler::toModel)
+                        .collect(Collectors.toList());
+
+        return CollectionModel.of(
+                organizations,
+                linkTo(methodOn(OrganizationController.class).getOrganizations(page, size, sorts))
+                        .withSelfRel());
     }
 
     @Operation(summary = "find organisation by ID",
@@ -79,11 +113,16 @@ public class OrganizationController {
                     content = @Content(schema = @Schema(implementation = Organization.class))),
             @ApiResponse(responseCode = "400", description = "invalid organization ID supplied")
     })
-    @GetMapping(path = "/{id}")
-    public Optional<Organization> getOrganization(
+    @GetMapping(path = "/{uuid}")
+    public EntityModel<Organization> getOrganization(
             @Parameter(description = "ID of the organisation that needs to be fetched")
-            @PathVariable(required = true) Long id) {
-        return organizationRepository.findById(id);
+            @PathVariable(name = "uuid") String uuid)
+    {
+        Organization organization =
+                organizationRepository.findByUuid(uuid)
+                        .orElseThrow(OrganizationNotFoundException::new);
+
+        return assembler.toModel(organization);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -95,11 +134,16 @@ public class OrganizationController {
             @ApiResponse(responseCode = "400", description = "invalid ID supplied")
     })
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Organization insertOrganization(
+    public ResponseEntity<?> insertOrganization(
             @Parameter(description = "Organisation object that needs to be added to the marketplace",
                     required=true, schema=@Schema(implementation = Organization.class))
-            @Valid @RequestBody Organization organization) {
-        return organizationRepository.save(organization);
+            @Valid @RequestBody Organization organization)
+    {
+        EntityModel<Organization> organizationModel =
+                assembler.toModel(organizationRepository.save(organization));
+        return ResponseEntity
+                .created(organizationModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(organizationModel);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -110,16 +154,16 @@ public class OrganizationController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "invalid ID supplied")
     })
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Organization updateOrganization(
+    @PutMapping(path = "/{uuid}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateOrganization(
             @Parameter(
                     description="Organization to update or replace. This cannot be null or empty.",
                     schema=@Schema(implementation = Organization.class),
                     required=true) @Valid @RequestBody Organization newOrganization,
             @Parameter(description = "ID of the organisation that needs to be updated")
-            @PathVariable(required = true) Long id)
+            @PathVariable(name = "uuid") String id)
     {
-        return organizationRepository.findById(id)
+        Organization updatedOrganization = organizationRepository.findByUuid(id)
                 .map(organisation -> {
                     organisation.setAbbreviation(newOrganization.getAbbreviation());
                     organisation.setName(newOrganization.getName());
@@ -128,9 +172,14 @@ public class OrganizationController {
                     return organizationRepository.save(organisation);
                 })
                 .orElseGet(() -> {
-                    newOrganization.setId(id);
+                    newOrganization.setUuid(id);
                     return organizationRepository.save(newOrganization);
                 });
+
+        EntityModel<Organization> entityModel = assembler.toModel(updatedOrganization);
+        return ResponseEntity
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -141,20 +190,21 @@ public class OrganizationController {
             @ApiResponse(responseCode = "400", description = "invalid id or json patch body"),
             @ApiResponse(responseCode = "404", description = "organisation not found")
     })
-    @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
-    public Organization partialUpdateOrganisation(
+    @PatchMapping(path = "/{uuid}", consumes = "application/json-patch+json")
+    public ResponseEntity<?> partialUpdateOrganisation(
             @Parameter(description="JSON Patch document structured as a JSON " +
                     "array of objects where each object contains one of the six " +
                     "JSON Patch operations: add, remove, replace, move, copy, and test",
                     schema=@Schema(implementation = JsonPatch.class),
                     required=true) @Valid @RequestBody JsonPatch patch,
             @Parameter(description = "ID of the organisation that needs to be partially updated")
-            @PathVariable(required = true) Long id)
+            @PathVariable(name = "uuid") String id)
     {
-        return organizationRepository.findById(id)
+        Organization partialUpdateOrganisation = organizationRepository.findByUuid(id)
                 .map(organisation -> {
                     try {
-                        Organization organizationPatched = applyPatchToOrganization(patch, organisation);
+                        Organization organizationPatched =
+                                applyPatchToOrganization(patch, organisation);
                         return organizationRepository.save(organizationPatched);
                     } catch (JsonPatchException e) {
                         throw new ResponseStatusException(
@@ -165,6 +215,9 @@ public class OrganizationController {
                     }
                 })
                 .orElseThrow(OrganizationNotFoundException::new);
+
+        EntityModel<Organization> entityModel = assembler.toModel(partialUpdateOrganisation);
+        return ResponseEntity.ok().body(entityModel);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -177,12 +230,18 @@ public class OrganizationController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "404", description = "invalid organisation id supplied")
     })
-    @DeleteMapping(path = "/{id}")
-    public void deleteOrganization(
+    @DeleteMapping(path = "/{uuid}")
+    public ResponseEntity<?> deleteOrganization(
             @Parameter(description="organisation id to delete", required=true)
-            @PathVariable(name = "id", required = true) Long id) {
-        organizationRepository.deleteById(id);
+            @PathVariable(name = "uuid") String id)
+    {
+        organizationRepository.deleteByUuid(id);
+        return ResponseEntity.noContent().build();
     }
+
+    /**
+     * util methods for this controller
+     */
 
     private Organization applyPatchToOrganization(
             JsonPatch patch,
@@ -191,5 +250,11 @@ public class OrganizationController {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode patched = patch.apply(objectMapper.convertValue(targetOrganization, JsonNode.class));
         return objectMapper.treeToValue(patched, Organization.class);
+    }
+
+    private Sort.Direction getSortDirection(String direction)
+    {
+        return direction.equals("asc") ?
+                Sort.Direction.ASC : Sort.Direction.DESC;
     }
 }
