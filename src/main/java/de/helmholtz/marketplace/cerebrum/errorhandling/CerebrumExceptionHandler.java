@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -201,6 +202,13 @@ public class CerebrumExceptionHandler extends ResponseEntityExceptionHandler
                 new CerebrumApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
         return new ResponseEntity<>(
                 cerebrumApiError, new HttpHeaders(), cerebrumApiError.getStatus());
+    }
+
+    //403
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(
+            Exception ex, WebRequest request) {
+        return new ResponseEntity<>(new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
     // 404

@@ -211,4 +211,17 @@ class CerebrumExceptionHandlerTest
                 .andReturn();
         assertEquals(406, response.getResponse().getStatus());
     }
+
+    //handleAccessDeniedException
+    @Test void
+    whenAccessDeniedException_thenForbidden() throws Exception
+    {
+        final MvcResult response =
+                mockMvc.perform(get(API_URI_PREFIX + "/users/whoami")
+                        .accept("application/json"))
+                        .andExpect(status().isForbidden())
+                        .andReturn();
+
+        assertEquals(403, response.getResponse().getStatus());
+    }
 }
