@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,20 +30,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import java.net.URI;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.helmholtz.marketplace.cerebrum.entities.MarketService;
+import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumEntityNotFoundException;
+import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumInvalidUuidException;
 import de.helmholtz.marketplace.cerebrum.repository.MarketServiceRepository;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
+import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 @RestController
+@Validated
 @RequestMapping(path = "${spring.data.rest.base-path}/services", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "services", description = "The API of the Service")
-public class MarketServiceController {
-
+public class MarketServiceController
+{
     private final MarketServiceRepository marketServiceRepository;
 
     public MarketServiceController(MarketServiceRepository marketServiceRepository) {
@@ -59,9 +69,9 @@ public class MarketServiceController {
     @GetMapping(path = "")
     public Iterable<MarketService> getMarketServices(
             @Parameter(description = "specify the page number")
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
             @Parameter(description = "limit the number of records returned in one page")
-            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @RequestParam(value = "size", defaultValue = "20") @Min(1) Integer size,
             @Parameter(description = "sort the fetched data in either ascending (asc) " +
                     "or descending (desc) according to one or more of the service " +
                     "properties. Eg. to sort the list in ascending order base on the " +
@@ -73,20 +83,26 @@ public class MarketServiceController {
     }
 
     /* get single Service */
-    @Operation(summary = "find a service by ID",
+    @Operation(summary = "find a service by UUID",
             description = "Returns detailed service information corresponding to the ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
                     content = @Content(schema = @Schema(implementation = MarketService.class))),
-            @ApiResponse(responseCode = "400", description = "invalid service ID supplied")
+            @ApiResponse(responseCode = "400", description = "invalid service UUID supplied"),
+            @ApiResponse(responseCode = "404", description = "service not found",
+                    content = @Content(schema = @Schema(implementation = CerebrumApiError.class)))
     })
     @GetMapping(path = "/{uuid}")
     public MarketService getMarketService(
-            @Parameter(description = "ID of the service that needs to be fetched")
-            @PathVariable() String uuid) {
-        return marketServiceRepository
-                .findByUuid(uuid)
-                .orElseThrow(() -> new CerebrumEntityNotFoundException("marketService", uuid));
+            @Parameter(description = "UUID of the service that needs to be fetched")
+            @PathVariable() String uuid)
+    {
+        if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
+            return marketServiceRepository
+                    .findByUuid(uuid)
+                    .orElseThrow(() -> new CerebrumEntityNotFoundException("service", uuid));
+        }
+        else throw new CerebrumInvalidUuidException(uuid);
     }
 
     /* create Service */
@@ -95,14 +111,22 @@ public class MarketServiceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "create operation was successful",
                     content = @Content(schema = @Schema(implementation = MarketService.class))),
-            @ApiResponse(responseCode = "400", description = "invalid ID supplied")
+            @ApiResponse(responseCode = "400", description = "invalid UUID supplied",
+                    content = @Content(schema = @Schema(implementation = CerebrumApiError.class))),
+            @ApiResponse(responseCode = "401", description = "unauthorised", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "forbidden", content = @Content())
     })
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public MarketService createMarketService(
+    public ResponseEntity<MarketService> createMarketService(
             @Parameter(description = "Service object that needs to be added to the marketplace",
                     required = true, schema = @Schema(implementation = MarketService.class))
-            @Valid @RequestBody MarketService marketService) {
-        return marketServiceRepository.save(marketService);
+            @Valid @RequestBody MarketService marketService, UriComponentsBuilder uriComponentsBuilder)
+    {
+        MarketService service = marketServiceRepository.save(marketService);
+        UriComponents uriComponents =
+                uriComponentsBuilder.path("/api/v0/services/{id}").buildAndExpand(service.getUuid());
+        URI location = uriComponents.toUri();
+        return ResponseEntity.created(location).body(service);
     }
 
     /* update Service */
@@ -113,18 +137,50 @@ public class MarketServiceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "update operation was successful",
                     content = @Content(schema = @Schema(implementation = MarketService.class))),
-            @ApiResponse(responseCode = "400", description = "invalid ID supplied")
+            @ApiResponse(responseCode = "201", description = "user created",
+                    content = @Content(schema = @Schema(implementation = MarketService.class))),
+            @ApiResponse(responseCode = "400", description = "invalid UUID supplied",
+                    content = @Content(schema = @Schema(implementation = CerebrumApiError.class))),
+            @ApiResponse(responseCode = "401", description = "unauthorised", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "forbidden", content = @Content())
     })
     @PutMapping(path = "/{uuid}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public MarketService updateMarketService(
+    public ResponseEntity<MarketService> updateMarketService(
             @Parameter(description = "Service to update or replace. This cannot be null or empty.",
                     required = true, schema = @Schema(implementation = MarketService.class))
             @Valid @RequestBody MarketService marketService,
-            @Parameter(description = "ID of the service that needs to be updated")
-            @PathVariable() String uuid)
+            @Parameter(description = "UUID of the service that needs to be updated")
+            @PathVariable() String uuid, UriComponentsBuilder uriComponentsBuilder)
     {
-        marketService.setUuid(uuid);
-        return this.marketServiceRepository.save(marketService);
+        if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
+            AtomicBoolean isCreated = new AtomicBoolean(false);
+            MarketService service = marketServiceRepository.findByUuid(uuid)
+                    .map(svc -> {
+                        svc.setUrl(marketService.getUrl());
+                        svc.setOrganizations(marketService.getOrganizations());
+                        svc.setName(marketService.getName());
+                        svc.setLifecycleStatus(marketService.getLifecycleStatus());
+                        svc.setAuthentication(marketService.getAuthentication());
+                        svc.setDescription(marketService.getDescription());
+                        svc.setCreated(marketService.getCreated());
+                        svc.setLastModified(marketService.getLastModified());
+                        return marketServiceRepository.save(svc);
+                    })
+                    .orElseGet(() -> {
+                        marketService.setUuid(uuid);
+                        isCreated.set(true);
+                        return marketServiceRepository.save(marketService);
+                    });
+
+            if (isCreated.get()) {
+                UriComponents uriComponents =
+                        uriComponentsBuilder.path("/api/v0/services/{id}").buildAndExpand(service.getUuid());
+                URI location = uriComponents.toUri();
+                return ResponseEntity.created(location).body(service);
+            }
+            return ResponseEntity.ok().body(service);
+        }
+        else throw new CerebrumInvalidUuidException(uuid);
     }
 
     /* JSON PATCH Service */
@@ -135,10 +191,13 @@ public class MarketServiceController {
             @ApiResponse(responseCode = "200", description = "successful operation",
                     content = @Content(schema = @Schema(implementation = MarketService.class))),
             @ApiResponse(responseCode = "400", description = "invalid id or json patch body"),
-            @ApiResponse(responseCode = "404", description = "service not found")
+            @ApiResponse(responseCode = "401", description = "unauthorised", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "forbidden", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "service not found",
+                    content = @Content(schema = @Schema(implementation = CerebrumApiError.class)))
     })
     @PatchMapping(path = "/{uuid}", consumes = "application/json-patch+json")
-    public MarketService partialUpdateMarketService(
+    public ResponseEntity<MarketService> partialUpdateMarketService(
             @Parameter(description = "JSON Patch document structured as a JSON " +
                     "array of objects where each object contains one of the six " +
                     "JSON Patch operations: add, remove, replace, move, copy, and test",
@@ -147,21 +206,25 @@ public class MarketServiceController {
             @Parameter(description = "ID of the service that needs to be partially updated")
             @PathVariable() String uuid)
     {
-        return marketServiceRepository.findByUuid(uuid)
-                .map(marketService -> {
-                    try {
-                        MarketService marketServicePatched =
-                                CerebrumControllerUtilities.applyPatch(patch, marketService, MarketService.class);
-                        return marketServiceRepository.save(marketServicePatched);
-                    } catch (JsonPatchException e) {
-                        throw new ResponseStatusException(
-                                HttpStatus.BAD_REQUEST, "invalid id or json patch body", e);
-                    } catch (JsonProcessingException e) {
-                        throw new ResponseStatusException(
-                                HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
-                    }
-                })
-                .orElseThrow(() -> new CerebrumEntityNotFoundException("marketService", uuid));
+        if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
+            MarketService partiallyUpdatedService = marketServiceRepository.findByUuid(uuid)
+                    .map(service -> {
+                        try {
+                            MarketService marketServicePatched =
+                                    CerebrumControllerUtilities.applyPatch(patch, service, MarketService.class);
+                            return marketServiceRepository.save(marketServicePatched);
+                        } catch (JsonPatchException e) {
+                            throw new ResponseStatusException(
+                                    HttpStatus.BAD_REQUEST, "json patch body", e);
+                        } catch (JsonProcessingException e) {
+                            throw new ResponseStatusException(
+                                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
+                        }
+                    })
+                    .orElseThrow(() -> new CerebrumEntityNotFoundException("user", uuid));
+            return ResponseEntity.ok().body(partiallyUpdatedService);
+        }
+        else throw new CerebrumInvalidUuidException(uuid);
     }
 
     /* delete Service */
@@ -172,8 +235,9 @@ public class MarketServiceController {
                     "number cannot be null or empty",
             security = @SecurityRequirement(name = "hdf-aai"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation"),
-            @ApiResponse(responseCode = "404", description = "invalid service id supplied")
+            @ApiResponse(responseCode = "204", description = "successful operation"),
+            @ApiResponse(responseCode = "401", description = "unauthorised", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "forbidden", content = @Content()),
     })
     @DeleteMapping(path = "/{uuid}")
     public ResponseEntity<MarketService> deleteMarketService(@PathVariable("uuid") String uuid)
