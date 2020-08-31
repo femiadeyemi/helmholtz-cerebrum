@@ -1,8 +1,6 @@
 package de.helmholtz.marketplace.cerebrum.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -14,7 +12,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -209,17 +205,9 @@ public class MarketServiceController
         if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
             MarketService partiallyUpdatedService = marketServiceRepository.findByUuid(uuid)
                     .map(service -> {
-                        try {
-                            MarketService marketServicePatched =
-                                    CerebrumControllerUtilities.applyPatch(patch, service, MarketService.class);
-                            return marketServiceRepository.save(marketServicePatched);
-                        } catch (JsonPatchException e) {
-                            throw new ResponseStatusException(
-                                    HttpStatus.BAD_REQUEST, "json patch body", e);
-                        } catch (JsonProcessingException e) {
-                            throw new ResponseStatusException(
-                                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
-                        }
+                        MarketService marketServicePatched =
+                                CerebrumControllerUtilities.applyPatch(patch, service, MarketService.class);
+                        return marketServiceRepository.save(marketServicePatched);
                     })
                     .orElseThrow(() -> new CerebrumEntityNotFoundException("user", uuid));
             return ResponseEntity.ok().body(partiallyUpdatedService);

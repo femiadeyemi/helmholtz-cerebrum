@@ -588,6 +588,36 @@ class MarketUserControllerTest
     }
 
     @Test void
+    givenValidUuid_and_validMarketUser_whenPutRequestToUsers_verifyOutput_and_businessLogicCall_thenUpdated()
+            throws Exception
+    {
+        //given
+        String usr = "{\"firstName\":\"Garreth\"," +
+                "\"lastName\":\"Lages\"," +
+                "\"email\":\"glages0@tmall.com\"," +
+                "\"sub\":\"QJQwuNkp-GElX-aSqc-ddNx-HsvatNkUUSVN\"}";
+
+        given(mockRepository.findByUuid("usr-5189a7bc-d630-11ea-87d0-0242ac130003"))
+                .willReturn(java.util.Optional.of(singleUser));
+        given(mockRepository.save(any(MarketUser.class))).willReturn(singleUser);
+
+        //when
+        mvc.perform(put(USR_API_URI + "/usr-5189a7bc-d630-11ea-87d0-0242ac130003")
+                .header("Authorization", "Bearer " + TOKEN)
+                .accept("application/json")
+                .contentType("application/json").content(usr))
+
+                //then
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$['firstName']").value(singleUser.getFirstName()))
+                .andExpect(jsonPath("$['uuid']").value("usr-5189a7bc-d630-11ea-87d0-0242ac130003"));
+
+        verify(mockRepository, times(1)).save(any(MarketUser.class));
+        verify(mockRepository, times(1)).findByUuid("usr-5189a7bc-d630-11ea-87d0-0242ac130003");
+    }
+
+    @Test void
     givenInvalidUuid_and_validMarketUser_whenPutRequestToUsers_thenBadRequest() throws Exception
     {
         //given

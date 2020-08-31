@@ -1,18 +1,7 @@
 package de.helmholtz.marketplace.cerebrum.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
-import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
-import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumEntityNotFoundException;
-import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumInvalidUuidException;
-import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
-import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
-import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
-
 import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -25,11 +14,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -50,8 +36,15 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
+import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
+import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumEntityNotFoundException;
+import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumInvalidUuidException;
+import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
+import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
+import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 @RestController
 @Validated
@@ -96,14 +89,6 @@ public class MarketUserController {
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .block();
-    }
-
-    @SuppressWarnings("unused")
-    public boolean isSomebody(JwtAuthenticationToken token) {
-        if (Objects.isNull(token)) return false;
-        String name = marketUserRepository.findBySub((String) token.getTokenAttributes().get("sub")).getFirstName();
-        if (Objects.isNull(name)) return false;
-        return name.trim().isEmpty();
     }
 
     /* get users */
@@ -261,17 +246,9 @@ public class MarketUserController {
         if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
             MarketUser partiallyUpdatedUser = marketUserRepository.findByUuid(uuid)
                     .map(user -> {
-                        try {
-                            MarketUser marketUserPatched =
-                                    CerebrumControllerUtilities.applyPatch(patch, user, MarketUser.class);
-                            return marketUserRepository.save(marketUserPatched);
-                        } catch (JsonPatchException e) {
-                            throw new ResponseStatusException(
-                                    HttpStatus.BAD_REQUEST, "json patch body", e);
-                        } catch (JsonProcessingException e) {
-                            throw new ResponseStatusException(
-                                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
-                        }
+                        MarketUser marketUserPatched =
+                                CerebrumControllerUtilities.applyPatch(patch, user, MarketUser.class);
+                        return marketUserRepository.save(marketUserPatched);
                     })
                     .orElseThrow(() -> new CerebrumEntityNotFoundException("user", uuid));
             return ResponseEntity.ok().body(partiallyUpdatedUser);

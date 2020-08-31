@@ -692,6 +692,42 @@ class OrganizationControllerTest
     }
 
     @Test void
+    givenValidUuid_and_validOrganisation_whenPutRequestToOrganisations_verifyOutput_and_BusinessLogicCall_thenUpdated()
+            throws Exception
+    {
+        //given
+        String kit= "{\"name\":\"Karlsruher Institut three fuer Technologie\"," +
+                "\"img\":\"http://www.kiiiit.edu/img/intern/kit_logo_V2_de.svg\"," +
+                "\"url\":\"http://www.kiiiit.edu/\"}";
+
+        Organization newKit = createNewOrganisationWithUuiD(
+                "Karlsruher Institut three fuer Technologie",
+                "KIT",
+                "http://www.kiiiit.edu/",
+                "http://www.kiiiit.edu/img/intern/kit_logo_V2_de.svg",
+                "org-5189a7bc-d630-11ea-87d0-0242ac130003");
+
+        given(mockRepository.findByUuid("org-5189a7bc-d630-11ea-87d0-0242ac130003"))
+                .willReturn(java.util.Optional.of(newKit));
+        given(mockRepository.save(any(Organization.class))).willReturn(newKit);
+
+        //when
+        mvc.perform(put(ORG_API_URI + "/org-5189a7bc-d630-11ea-87d0-0242ac130003")
+                .header("Authorization", "Bearer " + TOKEN)
+                .accept("application/json")
+                .contentType("application/json").content(kit))
+
+                //then
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$['name']").value(newKit.getName()))
+                .andExpect(jsonPath("$['uuid']").value("org-5189a7bc-d630-11ea-87d0-0242ac130003"));
+
+        verify(mockRepository, times(1)).save(any(Organization.class));
+        verify(mockRepository, times(1)).findByUuid("org-5189a7bc-d630-11ea-87d0-0242ac130003");
+    }
+
+    @Test void
     givenInvalidUuid_and_validOrganisation_whenPutRequestToOrganisations_thenBadRequest() throws Exception
     {
         //given

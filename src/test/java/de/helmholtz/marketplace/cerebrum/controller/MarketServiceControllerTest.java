@@ -583,6 +583,34 @@ class MarketServiceControllerTest
     }
 
     @Test void
+    givenValidUuid_and_validMarketService_whenPutRequestToServices_verifyOutput_and_businessLogicCall_thenUpdated()
+            throws Exception
+    {
+        //given
+        String validService = "{\"name\": \"Treeflex\", \"description\": \"Nullam varius. Nulla facilisi.\", " +
+                "\"url\": \"https://independent.co.uk/ipsum/dolor/sit/amet/consectetuer.aspx\"}";
+
+        given(mockRepository.findByUuid("svc-5189a7bc-d630-11ea-87d0-0242ac130003"))
+                .willReturn(java.util.Optional.of(singleService));
+        given(mockRepository.save(any(MarketService.class))).willReturn(singleService);
+
+        //when
+        mvc.perform(put(SVC_API_URI + "/svc-5189a7bc-d630-11ea-87d0-0242ac130003")
+                .header("Authorization", "Bearer " + TOKEN)
+                .accept("application/json")
+                .contentType("application/json").content(validService))
+
+                //then
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$['name']").value(singleService.getName()))
+                .andExpect(jsonPath("$['uuid']").value("svc-5189a7bc-d630-11ea-87d0-0242ac130003"));
+
+        verify(mockRepository, times(1)).save(any(MarketService.class));
+        verify(mockRepository, times(1)).findByUuid("svc-5189a7bc-d630-11ea-87d0-0242ac130003");
+    }
+
+    @Test void
     givenInvalidUuid_and_validMMarketService_whenPutRequestToServices_thenBadRequest() throws Exception
     {
         //given
