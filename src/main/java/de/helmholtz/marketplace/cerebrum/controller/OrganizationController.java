@@ -26,22 +26,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.net.URI;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.helmholtz.marketplace.cerebrum.entities.Organization;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
-import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumEntityNotFoundException;
-import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumInvalidUuidException;
-import de.helmholtz.marketplace.cerebrum.repository.OrganizationRepository;
+import de.helmholtz.marketplace.cerebrum.service.OrganizationService;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
-import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 @RestController
 @Validated
@@ -49,10 +43,11 @@ import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
         path = "${spring.data.rest.base-path}/organizations")
 @Tag(name = "organizations", description = "The Organization API")
 public class OrganizationController {
-    private final OrganizationRepository organizationRepository;
+    private final OrganizationService organizationService;
 
-    public OrganizationController(OrganizationRepository organizationRepository) {
-        this.organizationRepository = organizationRepository;
+    public OrganizationController(OrganizationService organizationService)
+    {
+        this.organizationService = organizationService;
     }
 
     /* get Organizations */
@@ -78,7 +73,7 @@ public class OrganizationController {
                     "name property; the value will be set to name.asc")
             @RequestParam(value = "sort", defaultValue = "name.asc") List<String> sorts)
     {
-        return organizationRepository.findAll(
+        return organizationService.getOrganizations(
                 PageRequest.of(page, size, Sort.by(CerebrumControllerUtilities.getOrders(sorts))));
     }
 
@@ -100,11 +95,7 @@ public class OrganizationController {
             @Parameter(description = "ID of the organization that needs to be fetched")
             @PathVariable(name = "uuid") String uuid)
     {
-        if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
-            return organizationRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new CerebrumEntityNotFoundException("organization", uuid));
-        }
-        else throw new CerebrumInvalidUuidException(uuid);
+        return organizationService.getOrganization(uuid);
     }
 
     /* create Organization */
@@ -124,14 +115,7 @@ public class OrganizationController {
                     required = true, schema = @Schema(implementation = Organization.class))
             @Valid @RequestBody Organization organization, UriComponentsBuilder uriComponentsBuilder)
     {
-        Organization createdOrg = organizationRepository.save(organization);
-        UriComponents uriComponents =
-                uriComponentsBuilder.path("/api/v0/organizations/{id}").buildAndExpand(createdOrg.getUuid());
-        URI location = uriComponents.toUri();
-
-        return ResponseEntity
-                .created(location)
-                .body(createdOrg);
+        return organizationService.createOrganisation(organization, uriComponentsBuilder);
     }
 
     /* update Organization */
@@ -156,31 +140,8 @@ public class OrganizationController {
             @Parameter(description = "Unique identifier of the organization that needs to be updated")
             @PathVariable(name = "uuid") String uuid, UriComponentsBuilder uriComponentsBuilder)
     {
-        if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
-            AtomicBoolean isCreated = new AtomicBoolean(false);
-            Organization org = organizationRepository.findByUuid(uuid)
-                    .map(organization -> {
-                        organization.setAbbreviation(newOrganization.getAbbreviation());
-                        organization.setName(newOrganization.getName());
-                        organization.setImg(newOrganization.getImg());
-                        organization.setUrl(newOrganization.getUrl());
-                        return organizationRepository.save(organization);
-                    })
-                    .orElseGet(() -> {
-                        newOrganization.setUuid(uuid);
-                        isCreated.set(true);
-                        return organizationRepository.save(newOrganization);
-                    });
-
-            if (isCreated.get()) {
-                UriComponents uriComponents =
-                        uriComponentsBuilder.path("/api/v0/organizations/{id}").buildAndExpand(org.getUuid());
-                URI location = uriComponents.toUri();
-                return ResponseEntity.created(location).body(org);
-            }
-            return ResponseEntity.ok().body(org);
-        }
-        else throw new CerebrumInvalidUuidException(uuid);
+        return organizationService
+                .updateOrganisation(uuid, newOrganization, uriComponentsBuilder);
     }
 
     /* JSON PATCH Organization */
@@ -208,17 +169,7 @@ public class OrganizationController {
             @Parameter(description = "ID of the organization that needs to be partially updated")
             @PathVariable(name = "uuid") String uuid)
     {
-        if (Boolean.TRUE.equals(CerebrumEntityUuidGenerator.isValid(uuid))) {
-            Organization partialUpdateOrganisation = organizationRepository.findByUuid(uuid)
-                    .map(organization -> {
-                        Organization organizationPatched =
-                                CerebrumControllerUtilities.applyPatch(patch, organization, Organization.class);
-                        return organizationRepository.save(organizationPatched);
-                    })
-                    .orElseThrow(() -> new CerebrumEntityNotFoundException("organization", uuid));
-            return ResponseEntity.ok().body(partialUpdateOrganisation);
-        }
-        else throw new CerebrumInvalidUuidException(uuid);
+        return organizationService.partiallyUpdateOrganisation(uuid, patch);
     }
 
     /* delete Organization */
@@ -237,7 +188,6 @@ public class OrganizationController {
             @Parameter(description="organization id to delete", required=true)
             @PathVariable(name = "uuid") String uuid)
     {
-        organizationRepository.deleteByUuid(uuid);
-        return ResponseEntity.noContent().build();
+        return organizationService.deleteOrganisation(uuid);
     }
 }

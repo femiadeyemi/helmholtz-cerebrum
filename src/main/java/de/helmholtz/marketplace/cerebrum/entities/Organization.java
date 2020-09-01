@@ -89,19 +89,23 @@ public class Organization {
         this.url = url;
     }
 
-    public Iterable<MarketService> getServiceList() {
+    public Iterable<MarketService> getServiceList()
+    {
         return serviceList;
     }
 
-    public void setServiceList(Iterable<MarketService> serviceList) {
+    public void setServiceList(Iterable<MarketService> serviceList)
+    {
         this.serviceList = serviceList;
     }
 
-    public Iterable<MarketUser> getContactPersons() {
+    public Iterable<MarketUser> getContactPersons()
+    {
         return contactPersons;
     }
 
-    public void setContactPersons(Iterable<MarketUser> contactPersons) {
+    public void setContactPersons(Iterable<MarketUser> contactPersons)
+    {
         this.contactPersons = contactPersons;
     }
 }

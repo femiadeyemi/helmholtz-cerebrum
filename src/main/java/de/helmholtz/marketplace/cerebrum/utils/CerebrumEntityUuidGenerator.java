@@ -12,6 +12,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
+import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumInvalidUuidException;
+
 public class CerebrumEntityUuidGenerator implements IdStrategy
 {
     public enum PrefixEnum
@@ -73,6 +75,12 @@ public class CerebrumEntityUuidGenerator implements IdStrategy
         } catch (IllegalArgumentException | NullPointerException ex) {
             return false;
         }
+    }
+
+    public static void checkUuidValidity(String uuid)
+    {
+        if (Boolean.FALSE.equals(isValid(uuid)))
+            throw new CerebrumInvalidUuidException(uuid);
     }
 
     /**

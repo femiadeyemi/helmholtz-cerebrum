@@ -1,13 +1,12 @@
 package de.helmholtz.marketplace.cerebrum.repository;
 
-import de.helmholtz.marketplace.cerebrum.entities.Organization;
-
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 import java.util.Optional;
 
-public interface OrganizationRepository
-        extends PagingAndSortingRepository<Organization, Long>
+import de.helmholtz.marketplace.cerebrum.entities.Organization;
+
+public interface OrganizationRepository extends Neo4jRepository<Organization, Long>
 {
     Optional<Organization> findByUuid(String uuid);
 

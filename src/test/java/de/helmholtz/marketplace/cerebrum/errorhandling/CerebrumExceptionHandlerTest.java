@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -124,7 +123,7 @@ class CerebrumExceptionHandlerTest
         assertEquals(HttpStatus.NOT_FOUND, error.getStatus());
         assertEquals(1, error.getErrors().size());
         assertTrue(error.getMessage()
-                .contains("Could not find organization " + nonExistingUuid));
+                .contains("Organization " + nonExistingUuid));
     }
 
     // handleMethodArgumentNotValid

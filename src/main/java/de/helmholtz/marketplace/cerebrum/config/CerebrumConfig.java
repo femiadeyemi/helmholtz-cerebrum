@@ -19,7 +19,8 @@ public class CerebrumConfig
     ClientHttpConnector clientConnector = new JettyClientHttpConnector(httpClient);
 
     @Bean
-    public WebClient authorisationServer() {
+    public WebClient authorisationServer()
+    {
         return WebClient.builder()
                 .filter(new ServletBearerExchangeFilterFunction())
                 .clientConnector(clientConnector)

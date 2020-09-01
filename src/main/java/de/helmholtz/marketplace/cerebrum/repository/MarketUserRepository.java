@@ -1,13 +1,13 @@
 package de.helmholtz.marketplace.cerebrum.repository;
 
-import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
-
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MarketUserRepository extends PagingAndSortingRepository<MarketUser, Long>
+import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
+
+public interface MarketUserRepository extends Neo4jRepository<MarketUser, Long>
 {
     MarketUser findBySub(@Param("sub") String sub);
 

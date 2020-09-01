@@ -17,7 +17,7 @@ import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerato
 public class MarketUser
 {
     @Schema(description = "Unique identifier of the marketplace user.",
-            example = "hmu-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
+            example = "usr-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
     @Id @GeneratedValue(strategy = CerebrumEntityUuidGenerator.class)
     private String uuid;
 
