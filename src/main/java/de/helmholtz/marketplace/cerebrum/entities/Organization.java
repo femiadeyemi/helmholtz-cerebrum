@@ -1,20 +1,27 @@
 package de.helmholtz.marketplace.cerebrum.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.URL;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Objects;
 
+import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
+
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 @Schema(name = "Organization", description = "POJO that represents a single organization entry.")
 @NodeEntity
-public class Organization {
-
+public class Organization
+{
     @Schema(description = "Unique identifier of the organisation",
             example = "org-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
     @Id @GeneratedValue(strategy = CerebrumEntityUuidGenerator.class)
@@ -42,8 +49,11 @@ public class Organization {
     private String url;
     @Schema(description = "A list of Services which are provided by the organization")
     private Iterable<MarketService> serviceList;
-    @Schema(description = "A list with users, to have a contact in case of trouble")
-    private Iterable<MarketUser> contactPersons;
+
+    @JsonIgnoreProperties("organization")
+    @Schema(description = "List of people that are affiliated with this organisation")
+    @Relationship(type = "BELONGS_TO", direction = INCOMING)
+    private List<Affiliation> members;
 
     public String getUuid()
     {
@@ -57,35 +67,43 @@ public class Organization {
                 ? uuid : generate("org");
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getAbbreviation() {
+    public String getAbbreviation()
+    {
         return abbreviation;
     }
 
-    public void setAbbreviation(String abbreviation) {
+    public void setAbbreviation(String abbreviation)
+    {
         this.abbreviation = abbreviation;
     }
 
-    public String getImg() {
+    public String getImg()
+    {
         return img;
     }
 
-    public void setImg(String img) {
+    public void setImg(String img)
+    {
         this.img = img;
     }
 
-    public String getUrl() {
+    public String getUrl()
+    {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(String url)
+    {
         this.url = url;
     }
 
@@ -99,13 +117,31 @@ public class Organization {
         this.serviceList = serviceList;
     }
 
-    public Iterable<MarketUser> getContactPersons()
+    public List<Affiliation> getMembers()
     {
-        return contactPersons;
+        return members;
     }
 
-    public void setContactPersons(Iterable<MarketUser> contactPersons)
+    public void setMembers(List<Affiliation> members)
     {
-        this.contactPersons = contactPersons;
+        this.members = members;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return name.equals(that.name) &&
+                Objects.equals(abbreviation, that.abbreviation) &&
+                Objects.equals(img, that.img) &&
+                url.equals(that.url);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(name, abbreviation, img, url);
     }
 }

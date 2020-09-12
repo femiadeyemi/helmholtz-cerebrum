@@ -32,6 +32,11 @@ public class OrganizationService extends CerebrumServiceBase<Organization, Organ
         return getEntity(uuid, organizationRepository);
     }
 
+    public Organization getOrganizationByAttributes(String attr, String value)
+    {
+        return getEntity(attr, value, organizationRepository);
+    }
+
     public ResponseEntity<Organization> createOrganisation(
             Organization entity, UriComponentsBuilder uriComponentsBuilder)
     {

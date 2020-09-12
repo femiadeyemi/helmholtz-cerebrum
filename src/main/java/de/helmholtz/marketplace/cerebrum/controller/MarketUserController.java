@@ -35,6 +35,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
+import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.MarketUserService;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
@@ -224,5 +225,30 @@ public class MarketUserController {
             @PathVariable(name = "uuid") String uuid)
     {
         return marketUserService.deleteUser(uuid);
+    }
+
+    /**
+     * Affiliations
+     */
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
+    @PostMapping(path = "/affiliations",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MarketUser> addAffiliation(@Valid @RequestBody Affiliation affiliation)
+    {
+        return marketUserService.addAffiliations(affiliation);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
+    @DeleteMapping(path = "/affiliations")
+    public ResponseEntity<MarketUser> deleteAffiliations(
+            @RequestParam String userKey,
+            @RequestParam String userValue,
+            @RequestParam String organizationKey,
+            @RequestParam String organizationValue)
+    {
+        return marketUserService.deleteAffiliations(
+                userKey, userValue, organizationKey, organizationValue);
     }
 }

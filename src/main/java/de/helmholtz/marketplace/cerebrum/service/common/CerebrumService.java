@@ -12,6 +12,8 @@ public interface CerebrumService<T, R>
 
     T getEntity(String uuid, R repository);
 
+    T getEntity(String key, String value, R repository);
+
     ResponseEntity<T> createEntity(T entity, R repository, UriComponentsBuilder uriComponentsBuilder);
 
     ResponseEntity<T> updateEntity(String uuid, T entity, R repository, UriComponentsBuilder uriComponentsBuilder);

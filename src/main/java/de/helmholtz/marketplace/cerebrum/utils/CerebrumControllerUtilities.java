@@ -46,4 +46,14 @@ public final class CerebrumControllerUtilities
         }
         return orders;
     }
+
+    public static <T> Boolean checkField(String fieldName, Class<T> clazz)
+    {
+        try {
+            clazz.getDeclaredField(fieldName);
+            return true;
+        } catch (NoSuchFieldException e) {
+            return false;
+        }
+    }
 }

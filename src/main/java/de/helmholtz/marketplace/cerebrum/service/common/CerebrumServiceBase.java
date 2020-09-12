@@ -92,7 +92,7 @@ public abstract class CerebrumServiceBase<T, R> implements CerebrumService<T, R>
         return path;
     }
 
-    protected Optional<T> findByUUid(String uuid, R repository)
+    protected Optional<T> findByUuid(String uuid, R repository)
     {
         checkUuidValidity(uuid);
         //noinspection unchecked
@@ -109,8 +109,19 @@ public abstract class CerebrumServiceBase<T, R> implements CerebrumService<T, R>
     @Override
     public T getEntity(String uuid, R repository)
     {
-        return findByUUid( uuid, repository)
+        return findByUuid(uuid, repository)
                 .orElseThrow(() -> new CerebrumEntityNotFoundException(this.entityClass.getName(), uuid));
+    }
+
+    @Override
+    public T getEntity(String attribute, String value, R repository)
+    {
+        //noinspection unchecked
+        Optional<T> entity = (Optional<T>) invoke(repositoryMethod(
+                "findBy" + attribute.substring(0, 1).toUpperCase() + attribute.substring(1), String.class),
+                repository, value);
+
+        return entity.orElseThrow(() -> new CerebrumEntityNotFoundException(this.entityClass.getName(), attribute));
     }
 
     @Override
@@ -132,7 +143,7 @@ public abstract class CerebrumServiceBase<T, R> implements CerebrumService<T, R>
                                           R repository, UriComponentsBuilder uriComponentsBuilder)
     {
         AtomicBoolean isCreated = new AtomicBoolean(false);
-        T updatedEntity = findByUUid(uuid, repository).map(retrievedEntity -> {
+        T updatedEntity = findByUuid(uuid, repository).map(retrievedEntity -> {
             Field[] fields = this.entityClass.getDeclaredFields();
 
             for (Field field : fields) {
@@ -177,7 +188,7 @@ public abstract class CerebrumServiceBase<T, R> implements CerebrumService<T, R>
     @Override
     public ResponseEntity<T> partiallyUpdateEntity(String uuid, R repository, JsonPatch patch)
     {
-        T partiallyUpdatedEntity = findByUUid(uuid, repository)
+        T partiallyUpdatedEntity = findByUuid(uuid, repository)
                 .map(retrievedEntity -> {
                     T patchedEntity = CerebrumControllerUtilities
                             .applyPatch(patch, retrievedEntity, this.entityClass);

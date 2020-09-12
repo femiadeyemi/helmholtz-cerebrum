@@ -1,14 +1,19 @@
 package de.helmholtz.marketplace.cerebrum.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Objects;
 
+import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
@@ -49,6 +54,10 @@ public class MarketUser
     @NotBlank
     private String sub;
 
+    @JsonIgnoreProperties("user")
+    @Relationship(type = "BELONGS_TO")
+    private List<Affiliation> affiliations;
+
     public String getUuid()
     {
         return uuid;
@@ -60,43 +69,82 @@ public class MarketUser
                 uuid : generate("usr");
     }
 
-    public String getFirstName() {
+    public String getFirstName()
+    {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(String firstName)
+    {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
+    public String getLastName()
+    {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName)
+    {
         this.lastName = lastName;
     }
 
-    public String getScreenName() {
+    public String getScreenName()
+    {
         return screenName;
     }
 
-    public void setScreenName(String screenName) {
+    public void setScreenName(String screenName)
+    {
         this.screenName = screenName;
     }
 
-    public String getEmail() {
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public String getSub() {
+    public String getSub()
+    {
         return sub;
     }
 
-    public void setSub(String sub) {
+    public void setSub(String sub)
+    {
         this.sub = sub;
+    }
+
+    public List<Affiliation> getAffiliations()
+    {
+        return affiliations;
+    }
+
+    public void setAffiliations(List<Affiliation> affiliations)
+    {
+        this.affiliations = affiliations;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MarketUser that = (MarketUser) o;
+        return firstName.equals(that.firstName) &&
+                lastName.equals(that.lastName) &&
+                Objects.equals(screenName, that.screenName) &&
+                email.equals(that.email) &&
+                sub.equals(that.sub);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(firstName, lastName, screenName, email, sub);
     }
 }
