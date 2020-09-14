@@ -148,10 +148,16 @@ public abstract class CerebrumServiceBase<T, R> implements CerebrumService<T, R>
 
             for (Field field : fields) {
                 if (field.getDeclaringClass() == this.entityClass
-                        && Modifier.toString(field.getModifiers()).contains("public")) {
+                        && Modifier.toString(field.getModifiers()).contains("private")) {
                     try {
-                        field.set(retrievedEntity,
-                                this.entityClass.getDeclaredField(field.getName()).get(submittedEntity));
+                        field.setAccessible(true);
+                        Field submittedEntityField = submittedEntity.getClass().getDeclaredField(field.getName());
+                        submittedEntityField.setAccessible(true);
+                        if (submittedEntityField.get(submittedEntity) != null) {
+                            field.set(retrievedEntity, submittedEntityField.get(submittedEntity));
+                        }
+                        field.setAccessible(false);
+                        submittedEntityField.setAccessible(false);
                     } catch (IllegalAccessException e) {
                         throw new ResponseStatusException(
                                 HttpStatus.INTERNAL_SERVER_ERROR,
