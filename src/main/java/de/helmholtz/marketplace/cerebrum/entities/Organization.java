@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
+import de.helmholtz.marketplace.cerebrum.entities.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
@@ -47,8 +48,11 @@ public class Organization
     @URL(message = "Web address")
     @NotNull
     private String url;
+
+    @JsonIgnoreProperties({"organization"})
     @Schema(description = "A list of Services which are provided by the organization")
-    private Iterable<MarketService> serviceList;
+    @Relationship(type = "HOSTED_BY", direction = INCOMING)
+    private List<ServiceProvider> hostedServices;
 
     @JsonIgnoreProperties("organization")
     @Schema(description = "List of people that are affiliated with this organisation")
@@ -107,14 +111,14 @@ public class Organization
         this.url = url;
     }
 
-    public Iterable<MarketService> getServiceList()
+    public List<ServiceProvider> getHostedServices()
     {
-        return serviceList;
+        return hostedServices;
     }
 
-    public void setServiceList(Iterable<MarketService> serviceList)
+    public void setHostedServices(List<ServiceProvider> serviceHosted)
     {
-        this.serviceList = serviceList;
+        this.hostedServices = serviceHosted;
     }
 
     public List<Affiliation> getMembers()

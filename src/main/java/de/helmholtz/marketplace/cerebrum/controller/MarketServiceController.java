@@ -33,6 +33,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 import de.helmholtz.marketplace.cerebrum.entities.MarketService;
+import de.helmholtz.marketplace.cerebrum.entities.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.MarketServiceService;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
@@ -87,7 +88,7 @@ public class MarketServiceController
             @Parameter(description = "UUID of the service that needs to be fetched")
             @PathVariable() String uuid)
     {
-        return marketServiceService.getUser(uuid);
+        return marketServiceService.getService(uuid);
     }
 
     /* create Service */
@@ -178,5 +179,27 @@ public class MarketServiceController
     public ResponseEntity<MarketService> deleteMarketService(@PathVariable("uuid") String uuid)
     {
         return marketServiceService.deleteService(uuid);
+    }
+
+    //serviceProvider
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
+    @PostMapping(path = "/providers",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MarketService> addProvider(@Valid @RequestBody ServiceProvider provider)
+    {
+        return marketServiceService.addProvider(provider);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
+    @DeleteMapping(path = "/affiliations")
+    public ResponseEntity<MarketService> deleteProviders(
+            @RequestParam String serviceKey,
+            @RequestParam String serviceValue,
+            @RequestParam String organizationKey,
+            @RequestParam String organizationValue)
+    {
+        return marketServiceService.deleteProviders(serviceKey, serviceValue, organizationKey, organizationValue);
     }
 }
