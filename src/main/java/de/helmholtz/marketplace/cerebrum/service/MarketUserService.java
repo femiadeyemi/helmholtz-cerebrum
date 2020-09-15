@@ -105,16 +105,18 @@ public class MarketUserService extends CerebrumServiceBase<MarketUser, MarketUse
         Boolean organizationFieldExist = checkField(organizationKey, Organization.class);
         if (userFieldExist && organizationFieldExist) {
             MarketUser user = getUserByAttributes(userKey, userValue);
-            for (Affiliation a : user.getAffiliations()) {
-                try {
-                    Field field = Organization.class.getDeclaredField(organizationKey);
-                    field.setAccessible(true);
-                    if (field.get(a.getOrganization()).equals(organizationValue)) {
-                        marketUserRepository.deleteAffiliations(user.getUuid(), a.getOrganization().getUuid());
-                        break;
+            if (user.getAffiliations() != null) {
+                for (Affiliation a : user.getAffiliations()) {
+                    try {
+                        Field field = Organization.class.getDeclaredField(organizationKey);
+                        field.setAccessible(true);
+                        if (field.get(a.getOrganization()).equals(organizationValue)) {
+                            marketUserRepository.deleteAffiliations(user.getUuid(), a.getOrganization().getUuid());
+                            break;
+                        }
+                    } catch (IllegalAccessException | NoSuchFieldException e) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
                     }
-                } catch (IllegalAccessException | NoSuchFieldException e) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
                 }
             }
         }
