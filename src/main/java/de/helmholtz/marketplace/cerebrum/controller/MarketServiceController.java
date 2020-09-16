@@ -33,6 +33,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 import de.helmholtz.marketplace.cerebrum.entities.MarketService;
+import de.helmholtz.marketplace.cerebrum.entities.relationship.Management;
 import de.helmholtz.marketplace.cerebrum.entities.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.MarketServiceService;
@@ -201,5 +202,27 @@ public class MarketServiceController
             @RequestParam String organizationValue)
     {
         return marketServiceService.deleteProviders(serviceKey, serviceValue, organizationKey, organizationValue);
+    }
+
+    //Management team
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
+    @PostMapping(path = "/management",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MarketService> addAffiliation(@Valid @RequestBody Management management)
+    {
+        return marketServiceService.addTeamMember(management);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
+    @DeleteMapping(path = "/management")
+    public ResponseEntity<MarketService> deleteTeamMember(
+            @RequestParam String serviceKey,
+            @RequestParam String serviceValue,
+            @RequestParam String userKey,
+            @RequestParam String userValue)
+    {
+        return marketServiceService.deleteTeamMember(serviceKey, serviceValue, userKey, userValue);
     }
 }

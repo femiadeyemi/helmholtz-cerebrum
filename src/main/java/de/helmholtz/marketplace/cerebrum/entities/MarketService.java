@@ -9,11 +9,14 @@ import org.neo4j.ogm.annotation.Relationship;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
+import de.helmholtz.marketplace.cerebrum.entities.relationship.Management;
 import de.helmholtz.marketplace.cerebrum.entities.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 public class MarketService
 {
@@ -49,6 +52,10 @@ public class MarketService
     @JsonIgnoreProperties({"marketService"})
     @Relationship(type = "HOSTED_BY")
     private List<ServiceProvider> serviceProviders;
+
+    @JsonIgnoreProperties({"marketService"})
+    @Relationship(type = "MANAGES", direction = INCOMING)
+    private List<Management> managementTeam;
 
     public String getUuid()
     {
@@ -137,8 +144,35 @@ public class MarketService
         return serviceProviders;
     }
 
-    public void setOrganizations(List<ServiceProvider> serviceProviders)
+    public void setServiceProviders(List<ServiceProvider> serviceProviders)
     {
         this.serviceProviders = serviceProviders;
+    }
+
+    public List<Management> getManagementTeam()
+    {
+        return managementTeam;
+    }
+
+    public void setManagementTeam(List<Management> managementTeam)
+    {
+        this.managementTeam = managementTeam;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MarketService service = (MarketService) o;
+        return name.equals(service.name) &&
+                url.equals(service.url) &&
+                Objects.equals(created, service.created);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(name, url, created);
     }
 }

@@ -12,7 +12,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.lang.reflect.Field;
 
 import de.helmholtz.marketplace.cerebrum.entities.MarketService;
+import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
 import de.helmholtz.marketplace.cerebrum.entities.Organization;
+import de.helmholtz.marketplace.cerebrum.entities.relationship.Management;
 import de.helmholtz.marketplace.cerebrum.entities.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.repository.MarketServiceRepository;
 import de.helmholtz.marketplace.cerebrum.service.common.CerebrumServiceBase;
@@ -24,13 +26,16 @@ public class MarketServiceService extends CerebrumServiceBase<MarketService, Mar
 {
     private final MarketServiceRepository marketServiceRepository;
     private final OrganizationService organizationService;
+    private final MarketUserService marketUserService;
 
     public MarketServiceService(MarketServiceRepository marketServiceRepository,
-                                OrganizationService organizationService)
+                                OrganizationService organizationService,
+                                MarketUserService marketUserService)
     {
         super(MarketService.class, MarketServiceRepository.class);
         this.marketServiceRepository = marketServiceRepository;
         this.organizationService = organizationService;
+        this.marketUserService = marketUserService;
     }
 
     public Page<MarketService> getServices(PageRequest page)
@@ -87,7 +92,7 @@ public class MarketServiceService extends CerebrumServiceBase<MarketService, Mar
                 }
             }
             Organization organization = organizationService.getOrganization(inputOrganization.getUuid());
-            MarketService updatedService = marketServiceRepository.createHostedInRelationship(
+            MarketService updatedService = marketServiceRepository.createHostedByRelationship(
                     service.getUuid(), organization.getUuid(), serviceProvider.getServiceTechnicalName());
             return ResponseEntity.ok().body(updatedService);
         } else {
@@ -113,6 +118,55 @@ public class MarketServiceService extends CerebrumServiceBase<MarketService, Mar
                         if (field.get(provider.getOrganization()).equals(organizationValue)) {
                             marketServiceRepository.deleteServiceProviders(
                                     service.getUuid(), provider.getOrganization().getUuid());
+                            break;
+                        }
+                    } catch (IllegalAccessException | NoSuchFieldException e) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+                    }
+                }
+            }
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    //Service Management Team
+    public ResponseEntity<MarketService> addTeamMember(Management management)
+    {
+        MarketService inputService = management.getMarketService();
+        MarketUser inputUser = management.getMarketUser();
+
+        if (inputService.getUuid() != null && inputUser.getUuid() != null) {
+            MarketService service = getServiceByAttributes("uuid", inputService.getUuid());
+            if (service.getManagementTeam() != null) {
+                for (Management member : service.getManagementTeam()) {
+                    if (member.equals(management)) {
+                        return ResponseEntity.noContent().build();
+                    }
+                }
+            }
+            MarketUser user = marketUserService.getUser(inputUser.getUuid());
+            MarketService updatedService = marketServiceRepository.createManagesRelationship(
+                    service.getUuid(), user.getUuid(), management.getRoles());
+            return ResponseEntity.ok().body(updatedService);
+        }
+        return null;
+    }
+
+    public ResponseEntity<MarketService> deleteTeamMember(
+            String serviceKey, String serviceValue, String userKey, String userValue)
+    {
+        Boolean serviceFieldExist = checkField(serviceKey, MarketService.class);
+        Boolean userFieldExist = checkField(userKey, MarketUser.class);
+        if (serviceFieldExist && userFieldExist) {
+            MarketService service = getServiceByAttributes(serviceKey, serviceValue);
+            if (service.getManagementTeam() != null) {
+                for (Management member : service.getManagementTeam()) {
+                    try {
+                        Field field = MarketUser.class.getDeclaredField(userKey);
+                        field.setAccessible(true);
+                        if (field.get(member.getMarketUser()).equals(userValue)) {
+                            marketServiceRepository.deleteManagementMember(
+                                    service.getUuid(), member.getMarketUser().getUuid());
                             break;
                         }
                     } catch (IllegalAccessException | NoSuchFieldException e) {

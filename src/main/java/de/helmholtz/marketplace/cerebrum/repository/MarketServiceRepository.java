@@ -20,15 +20,29 @@ public interface MarketServiceRepository extends Neo4jRepository<MarketService, 
             "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +
             "CREATE (service)-[r:HOSTED_BY { serviceTechnicalName : $serviceTechnicalName }]->(org) " +
             "RETURN service, r")
-    MarketService createHostedInRelationship(@Param("serviceUuid") String serviceUuid,
+    MarketService createHostedByRelationship(@Param("serviceUuid") String serviceUuid,
                                            @Param("orgUuid") String orgUuid,
                                            @Param("serviceTechnicalName") String serviceTechnicalName);
+
+    @Query("MATCH (service:MarketService),(user:MarketUser) " +
+            "WHERE service.uuid = $serviceUuid AND user.uuid = $orgUuid " +
+            "CREATE (user)-[r:MANAGES { roles : $roles }]->(service) " +
+            "RETURN service, r")
+    MarketService createManagesRelationship(@Param("serviceUuid") String serviceUuid,
+                                             @Param("orgUuid") String orgUuid,
+                                             @Param("roles") String[] roles);
 
     @SuppressWarnings("UnusedReturnValue")
     @Query("MATCH (service:MarketService)-[r:HOSTED_BY]->(org:Organization) " +
             "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +
             "DELETE r")
     Long deleteServiceProviders(@Param("serviceUuid") String serviceUuid, @Param("orgUuid") String orgUuid);
+
+    @SuppressWarnings("UnusedReturnValue")
+    @Query("MATCH (user:MarketUser)-[r:MANAGES]->(service:MarketService) " +
+            "WHERE service.uuid = $serviceUuid AND user.uuid = $userUuid " +
+            "DELETE r")
+    Long deleteManagementMember(@Param("serviceUuid") String serviceUuid, @Param("userUuid") String userUuid);
 
     @SuppressWarnings("UnusedReturnValue")
     Long deleteByUuid(String id);

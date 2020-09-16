@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
+import de.helmholtz.marketplace.cerebrum.entities.relationship.Management;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
@@ -57,6 +58,10 @@ public class MarketUser
     @JsonIgnoreProperties("user")
     @Relationship(type = "BELONGS_TO")
     private List<Affiliation> affiliations;
+
+    @JsonIgnoreProperties("marketUser")
+    @Relationship(type = "MANAGES")
+    private List<Management> managedServices;
 
     public String getUuid()
     {
@@ -127,6 +132,16 @@ public class MarketUser
     public void setAffiliations(List<Affiliation> affiliations)
     {
         this.affiliations = affiliations;
+    }
+
+    public List<Management> getManagedServices()
+    {
+        return managedServices;
+    }
+
+    public void setManagedServices(List<Management> managedServices)
+    {
+        this.managedServices = managedServices;
     }
 
     @Override
