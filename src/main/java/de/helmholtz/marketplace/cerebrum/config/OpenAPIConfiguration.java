@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.security.OAuthFlow;
 import io.swagger.v3.oas.annotations.security.OAuthFlows;
 import io.swagger.v3.oas.annotations.security.OAuthScope;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
     info = @Info(
@@ -25,10 +24,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
             name = "GNU Affero General Public License",
             url = "https://www.gnu.org/licenses/"
         )
-    ),
-    servers = {
-        @Server(url = "http://localhost:8090", description = "DEV Server")
-    }
+    )
 )
 @SecurityScheme(
     name = "hdf-aai",
