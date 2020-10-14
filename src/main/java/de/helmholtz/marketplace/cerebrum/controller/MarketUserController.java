@@ -32,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
@@ -77,13 +78,15 @@ public class MarketUserController {
                                     implementation = CerebrumApiError.class)))
             }
     )
-    public JsonNode whoami() {
-        return this.authorisationServer
+    public MarketUser whoami()
+    {
+        JsonNode json = this.authorisationServer
                 .get()
                 .uri("https://login.helmholtz.de/oauth2/userinfo")
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .block();
+        return checkAndAdd(json);
     }
 
     /* get users */
@@ -250,5 +253,19 @@ public class MarketUserController {
     {
         return marketUserService.deleteAffiliations(
                 userKey, userValue, organizationKey, organizationValue);
+    }
+
+    private MarketUser checkAndAdd(@NotNull JsonNode user)
+    {
+        MarketUser knownUser = marketUserService.getUser(user);
+        if (knownUser == null) {
+            MarketUser newUser = new MarketUser();
+            newUser.setFirstName(user.get("given_name").asText());
+            newUser.setLastName(user.get("family_name").asText());
+            newUser.setSub(user.get("sub").asText());
+            newUser.setEmail(user.get("email").asText());
+            return marketUserService.createUser(newUser);
+        }
+        return knownUser;
     }
 }

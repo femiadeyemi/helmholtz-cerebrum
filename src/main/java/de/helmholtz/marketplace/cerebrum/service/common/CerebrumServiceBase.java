@@ -125,6 +125,13 @@ public abstract class CerebrumServiceBase<T, R> implements CerebrumService<T, R>
     }
 
     @Override
+    public T createEntity(T entity, R repository)
+    {
+        //noinspection unchecked
+        return (T) invoke(repositoryMethod("save", Object.class), repository, entity);
+    }
+
+    @Override
     public ResponseEntity<T> createEntity(T entity, R repository, UriComponentsBuilder uriComponentsBuilder)
     {
         UriComponents uriComponents = uriComponentsBuilder

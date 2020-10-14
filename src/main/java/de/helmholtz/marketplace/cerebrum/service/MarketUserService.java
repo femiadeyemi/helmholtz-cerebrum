@@ -1,5 +1,6 @@
 package de.helmholtz.marketplace.cerebrum.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,9 +44,20 @@ public class MarketUserService extends CerebrumServiceBase<MarketUser, MarketUse
         return getEntity(uuid, marketUserRepository);
     }
 
+    public MarketUser getUser(JsonNode user)
+    {
+        //email and sub
+        return marketUserRepository.findByEmailAndSub(user.get("email").asText(), user.get("sub").asText());
+    }
+
     public MarketUser getUserByAttributes(String attr, String value)
     {
         return getEntity(attr, value, marketUserRepository);
+    }
+
+    public MarketUser createUser(MarketUser entity)
+    {
+        return createEntity(entity, marketUserRepository);
     }
 
     public ResponseEntity<MarketUser> createUser(
