@@ -1,7 +1,6 @@
 stages:
     - build
     - test
-    - test_sonar
     - pre_package
     - package
     - deploy
@@ -18,5 +17,4 @@ cache:
 
 include:
     - local: .gitlab/ci/ci.yml
-    - local: .gitlab/ci/static-code-analysis.yml
     - local: .gitlab/ci/create-docker-image-ci.yml
