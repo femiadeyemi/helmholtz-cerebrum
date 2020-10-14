@@ -1,0 +1,10 @@
+cerebrum:
+  allowed:
+      origins: https://helmholtz-marketplace-dev.test.fedcloud.eu
+
+spring:
+  data:
+    neo4j:
+      username: neo4j
+      password: neo4j
+      uri: bolt://cerebrum-neo4j:7687
