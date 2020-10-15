@@ -12,7 +12,8 @@ variables:
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-        - ".m2/repository"
+        - .m2/repository
+        - target/
 
 include:
     - local: .gitlab/ci/ci.yml
