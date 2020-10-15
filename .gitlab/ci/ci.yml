@@ -1,10 +1,51 @@
-ci_build:
+build:
     only:
         - master
         - tags
         - merge_requests
     stage: build
     image: maven:3-jdk-11
+    script: mvn compile
+
+test:
+    only:
+        - master
+        - tags
+        - merge_requests
+    stage: test
+    image: maven:3-jdk-11
     script:
         - 'export AAI_TOKEN=$(curl -u "helmholtz-marketplace:${CLIENT_SECRET}" -X POST "https://login.helmholtz.de/oauth2/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=${AAI_REFRESH_TOKEN}&client_id=helmholtz-marketplace&client_secret=${CLIENT_SECRET}" | sed "s/{.*\"access_token\":\"\([^\"]*\).*}/\1/g")'
-        - "mvn -Dtoken=$AAI_TOKEN -B package --file pom.xml"
+        - mvn -Dtoken=$AAI_TOKEN test
+
+package:
+    only:
+        - master
+    stage: package
+    image: maven:3-jdk-11
+    script: mvn -DskipTests clean install
+    artifacts:
+        paths:
+            - "target/*.tar"
+        expire_in: 600 seconds
+    tags:
+        - "docker"
+
+docker_push:
+    only:
+        - master
+    stage: deploy
+    image: docker:19.03.11
+    services:
+        - name: docker:19.03.11-dind
+          alias: docker
+    before_script:
+        - docker info
+    script:
+        - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        - docker build -t $DOCKER_IMAGE_LATEST .
+        - docker push $DOCKER_IMAGE_LATEST
+    dependencies:
+        - package
+    tags:
+        - "docker"

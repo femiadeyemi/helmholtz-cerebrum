@@ -1,228 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <!-- Suppression for Spring Boot 2.2 -->
-    <suppress until="2020-09-30Z">
+    <suppress>
+        <notes><![CDATA[
+      file name: jakarta.websocket-api-1.1.2.jar
+      ]]></notes>
+        <sha1>69c2fdfb75081cc935bc9d6c5616d12b0b73815f</sha1>
+        <cve>CVE-2020-11050</cve>
+    </suppress>
+    <suppress>
         <notes><![CDATA[
    file name: javax-websocket-server-impl-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>470eda384eafa6d378be9e8fbc953242943d64b5</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: javax-websocket-client-impl-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>f4938fc963ab1e51146df54a798d593d16894b48</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-        <cpe>cpe:/a:eclipse:eclipse_ide</cpe>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-reactive-httpclient-1.0.3.jar
    ]]></notes>
         <sha1>2649ef74b389fa09194220b7f769970e4eaabcd9</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
+        <cve>CVE-2009-5045</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-server-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>9c2cbd96426be38b1273ec87ae21e2696688a737</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: log4j-api-2.12.1.jar
+   file name: jetty-reactive-httpclient-1.0.3.jar
    ]]></notes>
-        <sha1>a55e6d987f50a515c9260b0451b4fa217dc539cb</sha1>
-        <cpe>cpe:/a:apache:log4j</cpe>
+        <sha1>2649ef74b389fa09194220b7f769970e4eaabcd9</sha1>
+        <cve>CVE-2009-5046</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-reactive-httpclient-1.0.3.jar
+   ]]></notes>
+        <sha1>2649ef74b389fa09194220b7f769970e4eaabcd9</sha1>
+        <cve>CVE-2017-7656</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-reactive-httpclient-1.0.3.jar
+   ]]></notes>
+        <sha1>2649ef74b389fa09194220b7f769970e4eaabcd9</sha1>
+        <cve>CVE-2017-7657</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-reactive-httpclient-1.0.3.jar
+   ]]></notes>
+        <sha1>2649ef74b389fa09194220b7f769970e4eaabcd9</sha1>
+        <cve>CVE-2017-7657</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-reactive-httpclient-1.0.3.jar
+   ]]></notes>
+        <sha1>2649ef74b389fa09194220b7f769970e4eaabcd9</sha1>
+        <cve>CVE-2017-7658</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-reactive-httpclient-1.0.3.jar
+   ]]></notes>
+        <sha1>2649ef74b389fa09194220b7f769970e4eaabcd9</sha1>
+        <cve>CVE-2017-9735</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-xml-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>86e99a01ec0fd331aad92eb38806d247ca617ea8</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: log4j-to-slf4j-2.12.1.jar
-   ]]></notes>
-        <sha1>dfb42ea8ce1a399bcf7218efe8115a0b7ab3788a</sha1>
-        <cpe>cpe:/a:apache:log4j</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: neo4j-ogm-bolt-driver-3.2.11.jar
-   ]]></notes>
-        <sha1>9970fa6a62232ad25c20736ab19806fa640bf76d</sha1>
-        <cpe>cpe:/a:bolt:bolt</cpe>
-        <cpe>cpe:/a:neo4j:neo4j</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: nimbus-jose-jwt-7.8.1.jar
-   ]]></notes>
-        <sha1>b1c70bacb4fa53513ed2d13438e70f8f0770917b</sha1>
-        <cpe>cpe:/a:connect2id:nimbus_jose%2bjwt</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-core-5.2.4.RELEASE.jar
-   ]]></notes>
-        <sha1>a0f4755f27b24e3490100b1c70f2ed3dd55aac52</sha1>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-oauth2-core-5.2.4.RELEASE.jar
-   ]]></notes>
-        <sha1>eb60c5c6927d19206f736d44419b415997c3e038</sha1>
-        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: websocket-server-9.4.28.v20200408.jar
-   ]]></notes>
-        <sha1>f4c0f11b5f423418547df91b70e3c1b99b3613d7</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-http-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>dd56750ea7410c925f1fbae973c0a19cce5a0a68</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-oauth2-resource-server-5.2.4.RELEASE.jar
-   ]]></notes>
-        <sha1>9e1fad2cc583b94f9d560a54962d7a65338c1b31</sha1>
-        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-web-5.2.4.RELEASE.jar
-   ]]></notes>
-        <sha1>78313f17b7a25aaeaefd1ca29ff9a577023b3a38</sha1>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: websocket-common-9.4.28.v20200408.jar
-   ]]></notes>
-        <sha1>3c96320ba88293de2fa0e10e727ac524faec2fe1</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-util-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>118d2a44721885a04238aee21a5055dc1ab3818a</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-config-5.2.4.RELEASE.jar
-   ]]></notes>
-        <sha1>7f2784bee84efcf0af3bc64c347290c26edcd0ec</sha1>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-oauth2-jose-5.2.4.RELEASE.jar
-   ]]></notes>
-        <sha1>478c5ebaa0abe902e07c43c747e3d241d80e6da8</sha1>
-        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: websocket-client-9.4.28.v20200408.jar
-   ]]></notes>
-        <sha1>66871bc50c5064d97cbbacfa4e268a5b3f42bc41</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-plus-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>8d26f992ac42fd1add734e24b0bf790420925122</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: jetty-util-9.4.28.v20200408.jar
-   ]]></notes>
-        <sha1>118d2a44721885a04238aee21a5055dc1ab3818a</sha1>
-        <cpe>cpe:/a:eclipse:eclipse_ide</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: websocket-servlet-9.4.28.v20200408.jar
-   ]]></notes>
-        <sha1>13efc3de05a2b4b9b690391f2437366ba1a2a3d7</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-webapp-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>cf5bfacfdca3d48eec9a0c852d3ba3c0535c0f03</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: nimbus-jose-jwt-7.8.1.jar
-   ]]></notes>
-        <sha1>b1c70bacb4fa53513ed2d13438e70f8f0770917b</sha1>
-        <vulnerabilityName>CVE-2019-17195</vulnerabilityName>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-client-9.4.28.v20200408.jar
    ]]></notes>
         <sha1>aa74bdd28f3cb50e0f7f33aee9b792080662e17f</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <cve>CVE-2019-17638</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <sha1>7df27a6d73e3094ad94ea4f32e3e6597cecbdf38</sha1>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -230,334 +132,779 @@
    ]]></notes>
         <sha1>7df27a6d73e3094ad94ea4f32e3e6597cecbdf38</sha1>
         <cpe>cpe:/a:eclipse:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <sha1>7df27a6d73e3094ad94ea4f32e3e6597cecbdf38</sha1>
         <cpe>cpe:/a:jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <sha1>7df27a6d73e3094ad94ea4f32e3e6597cecbdf38</sha1>
         <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-servlets-9.4.28.v20200408.jar
    ]]></notes>
-        <sha1>2e81c341ed0fc9a81f209f24c896c3d3abf3b757</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-servlets@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-security-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-security@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-security-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-security@.*$</packageUrl>
         <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-security-9.4.28.v20200408.jar
    ]]></notes>
-        <sha1>d5fe6851f14d1375e4b4ab1818475bfd929cf517</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-security@.*$</packageUrl>
         <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-security-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-security@.*$</packageUrl>
+        <cpe>cpe:/a:eclipse:jetty</cpe>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-annotations-9.4.28.v20200408.jar
    ]]></notes>
-        <sha1>c3bfac9d92841fb5100ef74d3cfc34cdb3df759d</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-annotations@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
    file name: jetty-continuation-9.4.28.v20200408.jar
    ]]></notes>
-        <sha1>e9972345e7c019469dbf59d8335c98c5bf8b6344</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-continuation@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
     </suppress>
-    <!-- Suppression for Spring Boot 2.3 -->
-    <suppress  until="2020-09-30Z">
+
+    <suppress>
         <notes><![CDATA[
-   file name: javax-websocket-server-impl-9.4.29.v20200521.jar
+   file name: log4j-api-2.12.1.jar
    ]]></notes>
-        <sha1>f981b1ebcb410943e138912424b94539f1adbaa6</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <sha1>a55e6d987f50a515c9260b0451b4fa217dc539cb</sha1>
+        <cve>CVE-2020-9488</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: jakarta.websocket-api-1.1.2.jar
+   file name: log4j-to-slf4j-2.12.1.jar
    ]]></notes>
-        <sha1>69c2fdfb75081cc935bc9d6c5616d12b0b73815f</sha1>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j\-to\-slf4j@.*$</packageUrl>
+        <cpe>cpe:/a:apache:log4j</cpe>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: javax-websocket-client-impl-9.4.29.v20200521.jar
+   file name: log4j-to-slf4j-2.12.1.jar
    ]]></notes>
-        <sha1>3e71f1e1fa705cd7335325e26173b260452b33b7</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j\-to\-slf4j@.*$</packageUrl>
+        <cve>CVE-2020-9488</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-reactive-httpclient-1.1.3.jar
-   ]]></notes>
-        <sha1>f60f2c00a1c0aa5039af2420e5626deddbd06117</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-server-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>2c6590067589a0730223416c3157b1d4d121b95b</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-xml-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>f33d47ab9e0edd5bcfde3d5147dc30885e5a2215</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-http-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>21b761eae53b8e5201fb8fdf03b9865116a29b47</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-util-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>4866aa5271465f1d9035c4726209e4926fe1599c</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-plus-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>29b693bde4988be331756a0c09ac1d2a775cefae</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
+
+
+
+
+    <suppress>
         <notes><![CDATA[
    file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-transport:4.1.45.Final)
    ]]></notes>
         <sha1>a3c745067b4bbc136db4ce3d113b95a1f2b278b6</sha1>
-        <cpe>cpe:/a:netty:netty</cpe>
+        <cve>CVE-2020-11612</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: jetty-jndi-9.4.29.v20200521.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>b36d91a0df4bf30eac1469990964c7f23837b10c</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: neo4j-ogm-bolt-driver-3.2.12.jar
-   ]]></notes>
-        <sha1>70e055a0d6c014e98f478deb0be5ac67f070c7ff</sha1>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
         <cpe>cpe:/a:bolt:bolt</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
         <cpe>cpe:/a:neo4j:neo4j</cpe>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: spring-security-core-5.3.3.RELEASE.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>abdd5a67b3fdc2f4a63023c3f60bbbf21c7c08cf</sha1>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
+        <cve>CVE-2017-16754</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: jetty-webapp-9.4.29.v20200521.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>75ffa373d7f96aaf3ef7e236605c9757f8e941bf</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
+        <cve>CVE-2019-15483</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: jetty-client-9.4.29.v20200521.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>b14775a6d9a13cec96469ed1504be511fb67c0fe</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
+        <cve>CVE-2019-15484</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: websocket-server-9.4.29.v20200521.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>291e5c662d63d2da24c01eec25f210b1369a7796</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
+        <cve>CVE-2019-15485</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: jetty-servlet-9.4.29.v20200521.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>cf3a0f63057cce87a8f0ca65906f3393be86a89c</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
+        <cve>CVE-2019-9185</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: spring-security-oauth2-core-5.3.3.RELEASE.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>28aaf647a4afa4b4edd7693c0d9dba7b65fcb3e6</sha1>
-        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
+        <cve>CVE-2020-4040</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
-   file name: jetty-servlets-9.4.29.v20200521.jar
+   file name: neo4j-ogm-bolt-driver-3.2.11.jar
    ]]></notes>
-        <sha1>29039954069c686e44664e8a51ddb9d692ca4977</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+        <packageUrl regex="true">^pkg:maven/org\.neo4j/neo4j\-ogm\-bolt\-driver@.*$</packageUrl>
+        <cve>CVE-2020-4041</cve>
     </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: spring-security-web-5.3.3.RELEASE.jar
-   ]]></notes>
-        <sha1>a7edf55294e312f4c09e372c333e94d96bcf7c70</sha1>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-security-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>401f979b090849ca789e6768806539099a5d7f4a</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: spring-security-config-5.3.3.RELEASE.jar
-   ]]></notes>
-        <sha1>4df881cc253f63e6aaff9dd66528c2dc18ca61e8</sha1>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-annotations-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>63afac711142424333981d25cb5649d7147ef961</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: jetty-continuation-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>855d117ee76c3009da297fb3e4479d50e47c6b86</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: websocket-common-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>9d0afdc697c1d97c51ed8423cb7bb3ab5b965dec</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: spring-security-oauth2-resource-server-5.3.3.RELEASE.jar
-   ]]></notes>
-        <sha1>00b218457a2eb7f0e843507a45e3ed659725352b</sha1>
-        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: websocket-client-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>7dd5784eb09912ece57865e0ac1ad236b420aceb</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: websocket-servlet-9.4.29.v20200521.jar
-   ]]></notes>
-        <sha1>0f089ed901e581ca0c3c539f9068e8c6dd4b3a2e</sha1>
-        <cpe>cpe:/a:eclipse:jetty</cpe>
-        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
-        <cpe>cpe:/a:jetty:jetty</cpe>
-        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
-        <notes><![CDATA[
-   file name: spring-security-oauth2-jose-5.3.3.RELEASE.jar
-   ]]></notes>
-        <sha1>ec95bc5b24451ab014fd98bf1bcd692b2d567bff</sha1>
-        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
-    </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
         <notes><![CDATA[
    file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-codec:4.1.45.Final)
    ]]></notes>
-        <sha1>bed638d884168c8fa1b91f808ab1d6597985c97c</sha1>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-codec@.*$</packageUrl>
         <cpe>cpe:/a:netty:netty</cpe>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
+        <notes><![CDATA[
+   file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-codec:4.1.45.Final)
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-codec@.*$</packageUrl>
+        <cve>CVE-2020-11612</cve>
+    </suppress>
+    <suppress>
         <notes><![CDATA[
    file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-common:4.1.45.Final)
    ]]></notes>
-        <sha1>c41bd9cbcdffad38fb7fc51a0e9c9f92607d1c45</sha1>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-common@.*$</packageUrl>
         <cpe>cpe:/a:netty:netty</cpe>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
+        <notes><![CDATA[
+   file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-common:4.1.45.Final)
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-common@.*$</packageUrl>
+        <cve>CVE-2020-11612</cve>
+    </suppress>
+    <suppress>
         <notes><![CDATA[
    file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-buffer:4.1.45.Final)
    ]]></notes>
-        <sha1>20a2757d2385a24ac531662b6578dbdd4e9ad6b7</sha1>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-buffer@.*$</packageUrl>
         <cpe>cpe:/a:netty:netty</cpe>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
+        <notes><![CDATA[
+   file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-buffer:4.1.45.Final)
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-buffer@.*$</packageUrl>
+        <cve>CVE-2020-11612</cve>
+    </suppress>
+    <suppress>
         <notes><![CDATA[
    file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-handler:4.1.45.Final)
    ]]></notes>
-        <sha1>585f729670f9adc3bf0870ee812298736cf86ed4</sha1>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-handler@.*$</packageUrl>
         <cpe>cpe:/a:netty:netty</cpe>
     </suppress>
-    <suppress  until="2020-09-30Z">
+    <suppress>
+        <notes><![CDATA[
+   file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-handler:4.1.45.Final)
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-handler@.*$</packageUrl>
+        <cve>CVE-2020-11612</cve>
+    </suppress>
+    <suppress>
         <notes><![CDATA[
    file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-resolver:4.1.45.Final)
    ]]></notes>
-        <sha1>669bf1333a58066034deb34dbf7fd0e54939e882</sha1>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-resolver@.*$</packageUrl>
         <cpe>cpe:/a:netty:netty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: neo4j-java-driver-4.0.1.jar (shaded: io.netty:netty-resolver:4.1.45.Final)
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-resolver@.*$</packageUrl>
+        <cve>CVE-2020-11612</cve>
+    </suppress>
+
+
+    <suppress>
+        <notes><![CDATA[
+   file name: nimbus-jose-jwt-7.8.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.nimbusds/nimbus\-jose\-jwt@.*$</packageUrl>
+        <cpe>cpe:/a:connect2id:nimbus_jose%2bjwt</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: nimbus-jose-jwt-7.8.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.nimbusds/nimbus\-jose\-jwt@.*$</packageUrl>
+        <cve>CVE-2019-17195</cve>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+   file name: snakeyaml-1.25.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
+        <cpe>cpe:/a:snakeyaml_project:snakeyaml</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: snakeyaml-1.25.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
+        <cve>CVE-2017-18640</cve>
+    </suppress>
+
+
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-core-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-core@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-core-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-core@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-core-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-core@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-core-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-core@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-core-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-core@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-core-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-core@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-core-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-core@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-core-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-core@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-core-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-core@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-core-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-core@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+
+
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-web-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-web@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-web-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-web@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-server@.*$</packageUrl>
+        <cpe>cpe:/a:eclipse:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-server@.*$</packageUrl>
+        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-server@.*$</packageUrl>
+        <cpe>cpe:/a:jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-server@.*$</packageUrl>
+        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-server@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-common-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-common@.*$</packageUrl>
+        <cpe>cpe:/a:eclipse:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-common-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-common@.*$</packageUrl>
+        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-common-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-common@.*$</packageUrl>
+        <cpe>cpe:/a:jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-common-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-common@.*$</packageUrl>
+        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-common-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-common@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-client-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-client@.*$</packageUrl>
+        <cpe>cpe:/a:eclipse:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-client-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-client@.*$</packageUrl>
+        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-client-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-client@.*$</packageUrl>
+        <cpe>cpe:/a:jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-client-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-client@.*$</packageUrl>
+        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-client-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-client@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-servlet@.*$</packageUrl>
+        <cpe>cpe:/a:eclipse:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-servlet@.*$</packageUrl>
+        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-servlet@.*$</packageUrl>
+        <cpe>cpe:/a:jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-servlet@.*$</packageUrl>
+        <cpe>cpe:/a:mortbay_jetty:jetty</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-servlet-9.4.28.v20200408.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty\.websocket/websocket\-servlet@.*$</packageUrl>
+        <cve>CVE-2019-17638</cve>
+    </suppress>
+
+
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-tx-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-tx@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-tx-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-tx@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-tx-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-tx@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-tx-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-tx@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-aop-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-aop@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-aop-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-aop@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-aop-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-aop@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-aop-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-aop@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-config-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-config@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-config-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-config@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-resource-server-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-resource\-server@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-resource-server-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-resource\-server@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-resource-server-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-resource\-server@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-resource-server-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-resource\-server@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-jcl-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-jcl@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-jcl-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-jcl@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-jcl-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-jcl@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-jcl-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-jcl@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-jose-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-jose@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal:spring_security_oauth</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-jose-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-jose@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-jose-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-jose@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_security_oauth</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-jose-5.2.4.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-jose@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-web-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-web@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-web-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-web@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-web-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-web@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-web-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-web@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-beans-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-beans@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-beans-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-beans@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-beans-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-beans@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-beans-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-beans@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-webmvc-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-webmvc@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-webmvc-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-webmvc@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-webmvc-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-webmvc@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-webmvc-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-webmvc@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-context-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-context@.*$</packageUrl>
+        <cpe>cpe:/a:pivotal_software:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-context-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-context@.*$</packageUrl>
+        <cpe>cpe:/a:springsource:spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-context-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-context@.*$</packageUrl>
+        <cpe>cpe:/a:vmware:springsource_spring_framework</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-context-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-context@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-webflux-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-webflux@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-expression-5.2.6.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-expression@.*$</packageUrl>
+        <cve>CVE-2020-5421</cve>
     </suppress>
 </suppressions>
