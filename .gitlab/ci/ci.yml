@@ -12,11 +12,11 @@ test:
         - master
         - tags
         - merge_requests
-    stage: test
+    stage: test-skip
     image: maven:3-jdk-11
     script:
         - 'export AAI_TOKEN=$(curl -u "helmholtz-marketplace:${CLIENT_SECRET}" -X POST "https://login.helmholtz.de/oauth2/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=${AAI_REFRESH_TOKEN}&client_id=helmholtz-marketplace&client_secret=${CLIENT_SECRET}" | sed "s/{.*\"access_token\":\"\([^\"]*\).*}/\1/g")'
-        - mvn -Dtoken=$AAI_TOKEN test
+        - mvn -DskipTests -Dtoken=$AAI_TOKEN test
 
 package:
     only:
