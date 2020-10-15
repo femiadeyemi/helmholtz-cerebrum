@@ -29,8 +29,6 @@ spring:
       password: secret
   mvc:
     throw-exception-if-no-handler-found: true
-  profiles:
-    active: @activatedProperties@
   security:
     oauth2:
       resourceserver:
