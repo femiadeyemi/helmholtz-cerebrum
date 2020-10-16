@@ -6,5 +6,5 @@ spring:
   data:
     neo4j:
       username: neo4j
-      password: neo4j
+      password: cerebrum
       uri: bolt://cerebrum-neo4j:7687
