@@ -2,6 +2,14 @@ cerebrum:
   allowed:
       origins: https://helmholtz-marketplace-dev.test.fedcloud.eu
 
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.boot.autoconfigure: DEBUG
+
 spring:
   data:
     neo4j:
