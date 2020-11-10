@@ -1,18 +1,28 @@
 cerebrum:
   allowed:
-      origins: https://helmholtz-marketplace-dev.test.fedcloud.eu
+      origins: http://hifis-tp.desy.de
 
 logging:
   level:
-    root: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.security.oauth2: DEBUG
+    root: INFO
+    org.springframework.web: TRACE
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
     org.springframework.boot.autoconfigure: DEBUG
+    org.neo4j.driver.GraphDatabase: TRACE
+    org.neo4j.driver.Driver: TRACE
+    org.neo4j.driver.OutboundMessageHandler: TRACE
+    org.neo4j.driver.InboundMessageDispatcher: TRACE
+
+org:
+  neo4j:
+    driver:
+      uri: bolt://localhost:7687
+      authentication:
+        username: neo4j
+        password: test
 
 spring:
   data:
     neo4j:
-      username: neo4j
-      password: cerebrum
-      uri: bolt://cerebrum-neo4j:7687
+      open-in-view: false

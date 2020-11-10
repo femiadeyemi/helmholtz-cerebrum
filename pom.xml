@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.7.RELEASE</version>
+		<version>2.3.5.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -19,7 +19,7 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<springdoc-openapi-ui.version>1.4.1</springdoc-openapi-ui.version>
+		<springdoc-openapi-ui.version>1.4.8</springdoc-openapi-ui.version>
 		<json-patch.version>1.13</json-patch.version>
 		<oauth2-oidc-sdk.version>8.3</oauth2-oidc-sdk.version>
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
@@ -35,6 +35,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-neo4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j.driver</groupId>
+			<artifactId>neo4j-java-driver-spring-boot-starter</artifactId>
+			<version>4.1.1.0</version>
 		</dependency>
 
 		<dependency>
@@ -66,6 +71,17 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-oauth2-jose</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.nimbusds</groupId>
+					<artifactId>nimbus-jose-jwt</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>7.9</version>
 		</dependency>
 
 		<dependency>
