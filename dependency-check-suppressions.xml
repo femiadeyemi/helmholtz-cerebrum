@@ -907,4 +907,39 @@
         <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-expression@.*$</packageUrl>
         <cve>CVE-2020-5421</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.33.v20201020.jar
+   ]]></notes>
+        <sha1>50b2288fd134ea456695d9cc1ca037a88fe0d309</sha1>
+        <cve>CVE-1999-0236</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.33.v20201020.jar
+   ]]></notes>
+        <sha1>50b2288fd134ea456695d9cc1ca037a88fe0d309</sha1>
+        <cve>CVE-1999-1412</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.33.v20201020.jar
+   ]]></notes>
+        <sha1>50b2288fd134ea456695d9cc1ca037a88fe0d309</sha1>
+        <cve>CVE-2007-0086</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.33.v20201020.jar
+   ]]></notes>
+        <sha1>50b2288fd134ea456695d9cc1ca037a88fe0d309</sha1>
+        <cve>CVE-2009-1890</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: websocket-server-9.4.33.v20201020.jar
+   ]]></notes>
+        <sha1>50b2288fd134ea456695d9cc1ca037a88fe0d309</sha1>
+        <cve>CVE-2007-4723</cve>
+    </suppress>
 </suppressions>

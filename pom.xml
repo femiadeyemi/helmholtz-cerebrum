@@ -25,7 +25,7 @@
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
 		<hibernate-validator.version>6.0.19.Final</hibernate-validator.version>
-		<dependency-check-maven.version>5.3.2</dependency-check-maven.version>
+		<dependency-check-maven.version>6.0.3</dependency-check-maven.version>
 		<dependency-check-maven.cvss-threshold>8</dependency-check-maven.cvss-threshold>
 		<!--suppress UnresolvedMavenProperty -->
 		<sonar.token>${env.SONAR_AUTH_TOKEN}</sonar.token>
