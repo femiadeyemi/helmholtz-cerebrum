@@ -23,7 +23,7 @@ public interface MarketUserRepository extends Neo4jRepository<MarketUser, Long>
     MarketUser findByEmailAndSub(@Param("email") String email, @Param("sub") String sub);
 
     @Query("MATCH (user:MarketUser),(org:Organization) " +
-            "WHERE user.uuid = userUuid AND org.uuid = $orgUuid " +
+            "WHERE user.uuid = $userUuid AND org.uuid = $orgUuid " +
             "CREATE (user)-[r:BELONGS_TO { status : $status, isAContactPerson : $isAContactPerson }]->(org) " +
             "RETURN user, r")
     MarketUser createBelongsToRelationship(@Param("userUuid") String userUuid,

@@ -1,15 +1,12 @@
 package de.helmholtz.marketplace.cerebrum.utils;
 
 import org.neo4j.ogm.id.IdStrategy;
-import org.springframework.web.server.ServerErrorException;
 
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumInvalidUuidException;
@@ -63,7 +60,7 @@ public class CerebrumEntityUuidGenerator implements IdStrategy
     public static synchronized String generate(String prefix)
     {
         PrefixEnum.checkPrefixValidity(prefix);
-        return prefix + "-" + generateType1UUID().toString();
+        return prefix + "-" + generateType1UUID();
     }
 
     public static Boolean isValid(String id)
@@ -98,14 +95,10 @@ public class CerebrumEntityUuidGenerator implements IdStrategy
 
     private static long get64LeastSignificantBitsForVersion1()
     {
-        try {
-            Random random = SecureRandom.getInstanceStrong();
-            long random63BitLong = random.nextLong() & 0x3FFFFFFFFFFFFFFFL;
-            long variant3BitFlag = 0x8000000000000000L;
-            return random63BitLong + variant3BitFlag;
-        } catch (NoSuchAlgorithmException e) {
-            throw new ServerErrorException("Error in generating secure random number for uuid", e);
-        }
+        SecureRandom random = new SecureRandom();
+        long random63BitLong = random.nextLong() & 0x3FFFFFFFFFFFFFFFL;
+        long variant3BitFlag = 0x8000000000000000L;
+        return random63BitLong + variant3BitFlag;
     }
 
     private static long get64MostSignificantBitsForVersion1()
