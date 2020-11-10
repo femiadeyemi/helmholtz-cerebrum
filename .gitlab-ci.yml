@@ -1,6 +1,6 @@
 stages:
     - build
-    - test-skip
+    - test
     - package
     - deploy
 
