@@ -69,6 +69,6 @@ production_deployment:
         - mkdir -p ~/.ssh
         - chmod 700 ~/.ssh
     script:
-        - ssh -A ubuntu@hifis-tp.desy.de
+        - ssh -A -tt ubuntu@hifis-tp.desy.de
         - echo $(whoami)
         - exit
