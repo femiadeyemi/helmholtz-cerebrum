@@ -51,6 +51,7 @@ docker_push:
             else
               docker build -t $DOCKER_IMAGE_TAGGED .
               docker push $DOCKER_IMAGE_TAGGED
+            fi
     dependencies:
         - package
     tags:
