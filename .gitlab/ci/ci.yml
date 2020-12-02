@@ -68,7 +68,9 @@ production_deployment:
         - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
         - mkdir -p ~/.ssh
         - chmod 700 ~/.ssh
+        - ssh-keyscan hifis-tp.desy.de >> ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
     script:
-        - ssh -v -A -tt -o StrictHostKeyChecking=no ubuntu@hifis-tp.desy.de uptime
+        - ssh -v -A -tt ubuntu@hifis-tp.desy.de
         - echo $(whoami)
         - exit
