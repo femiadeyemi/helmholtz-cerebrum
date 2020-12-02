@@ -6,7 +6,7 @@ stages:
 
 variables:
     MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-    DOCKER_IMAGE_TAGGED: helmholtzcloudserviceuser/cerebrum:$CI_COMMIT_SHA
+    DOCKER_IMAGE_TAGGED: helmholtzcloud/cerebrum:$CI_COMMIT_TAG
     DOCKER_IMAGE_LATEST: helmholtzcloudserviceuser/cerebrum:latest
 
 cache:
