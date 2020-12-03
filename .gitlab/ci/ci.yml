@@ -31,11 +31,11 @@ package:
     tags:
         - "docker"
 
-docker_push:
+docker_build_push:
     only:
         - master
         - tags
-    stage: deploy
+    stage: docker
     image: docker:19.03.11
     services:
         - name: docker:19.03.11-dind
@@ -60,7 +60,7 @@ docker_push:
 production_deployment:
     image: ubuntu
     only:
-        - master
+        - tags
     stage: deploy
     before_script:
         - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
@@ -70,5 +70,6 @@ production_deployment:
         - chmod 700 ~/.ssh
     script:
         - ssh -A -tt -o StrictHostKeyChecking=no ubuntu@hifis-tp.desy.de uptime
-        - echo $(whoami)
+        - sudo kubectl set image deployments/cerebrum-app cerebrum=$DOCKER_IMAGE_TAGGED
+        - sudo kubectl rollout restart deployment cerebrum-app
         - exit
