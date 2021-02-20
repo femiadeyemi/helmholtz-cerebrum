@@ -3,7 +3,7 @@ cerebrum:
     oauth2-token: ${token:notoken}
   version: @project.version@
   allowed:
-      origins: https://localhost:8080
+      origins: http://localhost:8080
 
 logging:
   level:
