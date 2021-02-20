@@ -35,6 +35,15 @@ public interface MarketServiceRepository extends Neo4jRepository<MarketService, 
     @SuppressWarnings("UnusedReturnValue")
     @Query("MATCH (service:MarketService)-[r:HOSTED_BY]->(org:Organization) " +
             "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +
+            "SET r.serviceTechnicalName = $softwareName " +
+            "RETURN service")
+    MarketService updateServiceProviderRelationship(
+            @Param("serviceUuid") String serviceUuid,
+            @Param("orgUuid") String orgUuid, @Param("softwareName") String serviceTechnicalName);
+
+    @SuppressWarnings("UnusedReturnValue")
+    @Query("MATCH (service:MarketService)-[r:HOSTED_BY]->(org:Organization) " +
+            "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +
             "DELETE r")
     Long deleteServiceProviders(@Param("serviceUuid") String serviceUuid, @Param("orgUuid") String orgUuid);
 

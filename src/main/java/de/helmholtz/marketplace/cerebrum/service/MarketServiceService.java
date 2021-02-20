@@ -103,6 +103,31 @@ public class MarketServiceService extends CerebrumServiceBase<MarketService, Mar
         }
     }
 
+    public ResponseEntity<MarketService> updateProvider(ServiceProvider serviceProvider)
+    {
+        MarketService serviceNode = serviceProvider.getMarketService();
+        Organization organizationNode = serviceProvider.getOrganization();
+
+        if (serviceNode.getUuid() != null && organizationNode.getUuid() != null) {
+            MarketService service = getServiceByAttributes("uuid", serviceNode.getUuid());
+
+            if (service.getServiceProviders() == null) {
+                return addProvider(serviceProvider);
+            }
+            for (ServiceProvider provider : service.getServiceProviders()) {
+                if (provider.getOrganization().getAbbreviation()
+                        .equals(organizationNode.getAbbreviation())) {
+                    MarketService updatedRelationship = marketServiceRepository.updateServiceProviderRelationship(
+                            service.getUuid(),
+                            provider.getOrganization().getUuid(),
+                            serviceProvider.getServiceTechnicalName());
+                    return ResponseEntity.ok().body(updatedRelationship);
+                }
+            }
+        }
+        return addProvider(serviceProvider);
+    }
+
     public ResponseEntity<MarketService> deleteProviders(
             String serviceKey, String serviceValue, String organizationKey, String organizationValue)
     {

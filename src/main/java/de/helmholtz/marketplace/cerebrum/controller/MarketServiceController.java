@@ -194,6 +194,15 @@ public class MarketServiceController
 
     @PreAuthorize("isAuthenticated()")
     @Operation(security = @SecurityRequirement(name = "hdf-aai"))
+    @PutMapping(path = "/providers",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MarketService> updateProvider(@Valid @RequestBody ServiceProvider provider)
+    {
+        return marketServiceService.updateProvider(provider);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
     @DeleteMapping(path = "/affiliations")
     public ResponseEntity<MarketService> deleteProviders(
             @RequestParam String serviceKey,
