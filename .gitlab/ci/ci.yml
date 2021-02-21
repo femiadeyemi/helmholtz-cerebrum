@@ -60,7 +60,6 @@ docker_build_push:
 production_deployment:
     image: ubuntu
     only:
-        - master
         - tags
     stage: deploy
     before_script:
