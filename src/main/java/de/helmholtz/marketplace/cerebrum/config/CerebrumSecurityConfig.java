@@ -16,7 +16,7 @@ import java.util.List;
 @EnableWebSecurity
 public class CerebrumSecurityConfig extends WebSecurityConfigurerAdapter
 {
-    @Value("${cerebrum.allowed.origins}")
+    @Value("#{'${cerebrum.allowed.origins}'.split(',')}")
     List<String> allowedOrigins;
 
     @Override

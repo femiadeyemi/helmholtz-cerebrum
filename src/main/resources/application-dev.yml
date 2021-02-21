@@ -1,6 +1,6 @@
 cerebrum:
   allowed:
-      origins: https://hifis-tp.desy.de https://cloud.helmholtz.de
+      origins: https://hifis-tp.desy.de,https://cloud.helmholtz.de
 
 logging:
   level:
