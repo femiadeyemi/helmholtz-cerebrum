@@ -33,6 +33,10 @@ public class MarketService
             example = "A awesome Sync+Share Service provides by Helmholtz Zentrum xy")
     private String description;
 
+    @Schema(description = "Summary of the service's descriptio",
+            example = "A awesome Sync+Share Service provides by Helmholtz Zentrum xy")
+    private String summary;
+
     @Schema(description = "Url to a Service", example = "serviceXy.helmholtz.de")
     private String url;
 
@@ -84,9 +88,19 @@ public class MarketService
         return description;
     }
 
+    public String getSummary()
+    {
+        return summary;
+    }
+
     public void setDescription(String description)
     {
         this.description = description;
+    }
+
+    public void setSummary(String summary)
+    {
+        this.summary = summary;
     }
 
     public String getUrl()
