@@ -174,7 +174,7 @@ class MarketServiceControllerTest
         src.setUuid(uuid);
         src.setName(name);
         src.setDescription(description);
-        src.setUrl(url);
+        src.setEntryPoint(url);
         return src;
     }
 
@@ -386,7 +386,7 @@ class MarketServiceControllerTest
     {
         //given
         services.sort(Comparator.comparing(
-                MarketService::getUrl, Comparator.reverseOrder()));
+                MarketService::getEntryPoint, Comparator.reverseOrder()));
         Pageable pageable = PageRequest.of(
                 0,20, Sort.by(Sort.Order.desc("url")));
         Page<MarketService> page = new PageImpl<>(services, pageable,200L);

@@ -14,7 +14,7 @@ public interface MarketServiceRepository extends Neo4jRepository<MarketService, 
 
     Optional<MarketService> findByName(@Param("name") String name);
 
-    Optional<MarketService> findByUrl(@Param("url") String url);
+    Optional<MarketService> findByEntryPoint(@Param("entryPoint") String url);
 
     @Query("MATCH (service:MarketService),(org:Organization) " +
             "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +

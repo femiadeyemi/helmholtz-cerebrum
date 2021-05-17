@@ -2,12 +2,17 @@ package de.helmholtz.marketplace.cerebrum.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,10 +23,14 @@ import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
 import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
-public class MarketService
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
+@NodeEntity
+public class MarketService extends AuditMetadata
 {
     @Schema(description = "Unique identifier of the market service.",
             example = "svc-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
+    @Setter(AccessLevel.NONE)
     @Id @GeneratedValue(strategy = CerebrumEntityUuidGenerator.class)
     private String uuid;
 
@@ -33,24 +42,39 @@ public class MarketService
             example = "A awesome Sync+Share Service provides by Helmholtz Zentrum xy")
     private String description;
 
-    @Schema(description = "Summary of the service's descriptio",
-            example = "A awesome Sync+Share Service provides by Helmholtz Zentrum xy")
+    @Schema(description = "Summary of the service's description", example = "Sync+Share Service")
     private String summary;
 
     @Schema(description = "Url to a Service", example = "serviceXy.helmholtz.de")
-    private String url;
+    private String entryPoint;
 
-    @Schema(description = "Creation date of a Service", example = "2020-02-19")
-    private Date created;
+    @Schema(description = "The service version number", example = "1.0.1")
+    private String version;
 
-    @Schema(description = "Date of last modification", example = "2020-03-24")
-    private Date lastModified;
+    @Schema(description = "Service's email address", example = "fake-email@example.org")
+    @Email
+    private String email;
 
-    @Schema(description = "Specifies the current lifecycle")
-    private LifecycleStatus lifecycleStatus;
+    @Schema(description = "", example = "True")
+    private boolean multiTenancy;
 
-    @Schema(description = "Specifies the authentication which a user can use to log in to a service")
-    private Authentication authentication;
+    @Schema(description = "")
+    private String enrolmentPolicy;
+
+    @Schema(description = "")
+    private String policy;
+
+    @Schema(description = "")
+    private String documentation;
+
+    @Schema(description = "", example = "PRODUCTION")
+    private Phase phase;
+
+    @Schema(description = "")
+    private List<String> targetGroup = new ArrayList<>();
+
+    @Schema(description = "")
+    private List<String> tags = new ArrayList<>();
 
     @Schema(description = "List of services provided by this organisation")
     @JsonIgnoreProperties({"marketService"})
@@ -61,116 +85,11 @@ public class MarketService
     @Relationship(type = "MANAGES", direction = INCOMING)
     private List<Management> managementTeam;
 
-    public String getUuid()
-    {
-        return uuid;
-    }
-
     public void setUuid(String uuid)
     {
         this.uuid =  Boolean.TRUE.equals(
                 CerebrumEntityUuidGenerator.isValid(uuid))
                 ? uuid : generate("org");
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public String getSummary()
-    {
-        return summary;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    public void setSummary(String summary)
-    {
-        this.summary = summary;
-    }
-
-    public String getUrl()
-    {
-        return url;
-    }
-
-    public void setUrl(String url)
-    {
-        this.url = url;
-    }
-
-    public Date getCreated()
-    {
-        return created;
-    }
-
-    public void setCreated(Date created)
-    {
-        this.created = created;
-    }
-
-    public Date getLastModified()
-    {
-        return lastModified;
-    }
-
-    public void setLastModified(Date lastModified)
-    {
-        this.lastModified = lastModified;
-    }
-
-    public LifecycleStatus getLifecycleStatus()
-    {
-        return lifecycleStatus;
-    }
-
-    public void setLifecycleStatus(LifecycleStatus lifecycleStatus)
-    {
-        this.lifecycleStatus = lifecycleStatus;
-    }
-
-    public Authentication getAuthentication()
-    {
-        return authentication;
-    }
-
-    public void setAuthentication(Authentication authentication)
-    {
-        this.authentication = authentication;
-    }
-
-    public List<ServiceProvider> getServiceProviders()
-    {
-        return serviceProviders;
-    }
-
-    public void setServiceProviders(List<ServiceProvider> serviceProviders)
-    {
-        this.serviceProviders = serviceProviders;
-    }
-
-    public List<Management> getManagementTeam()
-    {
-        return managementTeam;
-    }
-
-    public void setManagementTeam(List<Management> managementTeam)
-    {
-        this.managementTeam = managementTeam;
     }
 
     @Override
@@ -180,13 +99,19 @@ public class MarketService
         if (o == null || getClass() != o.getClass()) return false;
         MarketService service = (MarketService) o;
         return name.equals(service.name) &&
-                url.equals(service.url) &&
-                Objects.equals(created, service.created);
+                entryPoint.equals(service.entryPoint);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(name, url, created);
+        return Objects.hash(name, entryPoint);
     }
+}
+
+enum Phase
+{
+    TEST,
+    PILOT,
+    PRODUCTION
 }
