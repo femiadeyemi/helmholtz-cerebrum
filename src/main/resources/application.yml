@@ -24,7 +24,16 @@ server:
   error:
     whitelabel:
       enabled: false
+  shutdown: "graceful"
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus,health,info,metric,shutdown"
+  metrics:
+    tags:
+      application: ${spring.application.name}
 org:
   neo4j:
     driver:
@@ -34,6 +43,8 @@ org:
         password: test
 
 spring:
+  application:
+    name: cerebrum-app
   data:
     rest:
       base-path: /api/v0

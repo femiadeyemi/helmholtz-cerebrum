@@ -26,7 +26,7 @@ public class CerebrumSecurityConfig extends WebSecurityConfigurerAdapter
                 .cors().and()
                 .authorizeRequests()
                     .mvcMatchers("/api/v0/admin/**").hasRole("ADMIN")
-                    .mvcMatchers("/", "/swagger-ui/**", "/api/**").permitAll()
+                    .mvcMatchers("/", "/swagger-ui/**", "/api/**", "/actuator/**", "/favicon.ico").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
