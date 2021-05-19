@@ -17,6 +17,7 @@ public class CerebrumEntityUuidGenerator implements IdStrategy
     {
         ORGANIZATION("org", "organization"),
         HELMHOLTZMARKETUSER ("usr", "marketuser"),
+        PERSON ("usr", "person"),
         MARKETSERVICE ("svc", "marketservice");
 
         private final String prefix;

@@ -2,6 +2,9 @@ package de.helmholtz.marketplace.cerebrum.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
@@ -20,11 +23,14 @@ import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerato
 import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 @Schema(name = "Organization", description = "POJO that represents a single organization entry.")
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 @NodeEntity
 public class Organization
 {
     @Schema(description = "Unique identifier of the organisation",
             example = "org-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
+    @Setter(AccessLevel.NONE)
     @Id @GeneratedValue(strategy = CerebrumEntityUuidGenerator.class)
     private String uuid;
 
@@ -33,9 +39,13 @@ public class Organization
     @NotNull
     private String name;
 
+    @Schema(description = "Name of the organisation in German")
+    private String nameDE;
+
     @Schema(description = "The shortened form of an organisation's name - this " +
             "can be an acronym or initial",
             example = "DESY")
+    @Setter(AccessLevel.NONE)
     private String abbreviation;
 
     @Schema(description = "Valid web address link to the organisation logo " +
@@ -49,6 +59,9 @@ public class Organization
     @NotNull
     private String url;
 
+    @Schema(description = "", example = "HELMHOLTZ_CENTRE")
+    private Type type;
+
     @JsonIgnoreProperties({"organization"})
     @Schema(description = "A list of Services which are provided by the organization")
     @Relationship(type = "HOSTED_BY", direction = INCOMING)
@@ -59,11 +72,6 @@ public class Organization
     @Relationship(type = "BELONGS_TO", direction = INCOMING)
     private List<Affiliation> members;
 
-    public String getUuid()
-    {
-        return uuid;
-    }
-
     public void setUuid(String uuid)
     {
         this.uuid =  Boolean.TRUE.equals(
@@ -71,64 +79,9 @@ public class Organization
                 ? uuid : generate("org");
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getAbbreviation()
-    {
-        return abbreviation;
-    }
-
     public void setAbbreviation(String abbreviation)
     {
-        this.abbreviation = abbreviation;
-    }
-
-    public String getImg()
-    {
-        return img;
-    }
-
-    public void setImg(String img)
-    {
-        this.img = img;
-    }
-
-    public String getUrl()
-    {
-        return url;
-    }
-
-    public void setUrl(String url)
-    {
-        this.url = url;
-    }
-
-    public List<ServiceProvider> getHostedServices()
-    {
-        return hostedServices;
-    }
-
-    public void setHostedServices(List<ServiceProvider> serviceHosted)
-    {
-        this.hostedServices = serviceHosted;
-    }
-
-    public List<Affiliation> getMembers()
-    {
-        return members;
-    }
-
-    public void setMembers(List<Affiliation> members)
-    {
-        this.members = members;
+        this.abbreviation = abbreviation.toUpperCase();
     }
 
     @Override
@@ -148,4 +101,13 @@ public class Organization
     {
         return Objects.hash(name, abbreviation, img, url);
     }
+}
+
+enum Type
+{
+    HELMHOLTZ_CENTRE,
+    DEPARTMENT,
+    GROUP,
+    UNIT,
+    OTHERS
 }
