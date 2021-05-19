@@ -1,4 +1,4 @@
-package de.helmholtz.marketplace.cerebrum.entities.relationship;
+package de.helmholtz.marketplace.cerebrum.entity.relationship;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.neo4j.ogm.annotation.EndNode;
@@ -10,8 +10,8 @@ import org.neo4j.ogm.annotation.StartNode;
 import java.util.Arrays;
 import java.util.Objects;
 
-import de.helmholtz.marketplace.cerebrum.entities.MarketService;
-import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
+import de.helmholtz.marketplace.cerebrum.entity.MarketService;
+import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
 
 @RelationshipEntity(type = "MANAGES")
 public class Management

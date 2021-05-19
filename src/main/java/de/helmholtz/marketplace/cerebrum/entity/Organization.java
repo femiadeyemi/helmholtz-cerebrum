@@ -1,4 +1,4 @@
-package de.helmholtz.marketplace.cerebrum.entities;
+package de.helmholtz.marketplace.cerebrum.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,8 +15,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
-import de.helmholtz.marketplace.cerebrum.entities.relationship.ServiceProvider;
+import de.helmholtz.marketplace.cerebrum.entity.relationship.Affiliation;
+import de.helmholtz.marketplace.cerebrum.entity.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;

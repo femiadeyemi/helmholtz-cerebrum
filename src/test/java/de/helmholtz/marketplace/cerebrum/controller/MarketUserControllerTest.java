@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
+import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
 import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

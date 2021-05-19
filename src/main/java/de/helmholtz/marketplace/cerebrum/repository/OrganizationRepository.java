@@ -5,7 +5,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-import de.helmholtz.marketplace.cerebrum.entities.Organization;
+import de.helmholtz.marketplace.cerebrum.entity.Organization;
 
 public interface OrganizationRepository extends Neo4jRepository<Organization, Long>
 {

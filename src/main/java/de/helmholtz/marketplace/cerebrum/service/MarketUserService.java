@@ -12,9 +12,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.lang.reflect.Field;
 
-import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
-import de.helmholtz.marketplace.cerebrum.entities.Organization;
-import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
+import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
+import de.helmholtz.marketplace.cerebrum.entity.Organization;
+import de.helmholtz.marketplace.cerebrum.entity.relationship.Affiliation;
 import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
 import de.helmholtz.marketplace.cerebrum.service.common.CerebrumServiceBase;
 

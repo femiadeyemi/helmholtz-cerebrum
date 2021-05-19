@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import de.helmholtz.marketplace.cerebrum.entities.Organization;
+import de.helmholtz.marketplace.cerebrum.entity.Organization;
 import de.helmholtz.marketplace.cerebrum.repository.OrganizationRepository;
 import de.helmholtz.marketplace.cerebrum.service.common.CerebrumServiceBase;
 

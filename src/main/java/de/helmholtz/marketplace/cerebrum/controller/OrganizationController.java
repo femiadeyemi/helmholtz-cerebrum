@@ -32,7 +32,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-import de.helmholtz.marketplace.cerebrum.entities.Organization;
+import de.helmholtz.marketplace.cerebrum.entity.Organization;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.OrganizationService;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;

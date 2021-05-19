@@ -35,8 +35,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
-import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
+import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
+import de.helmholtz.marketplace.cerebrum.entity.relationship.Affiliation;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.MarketUserService;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;

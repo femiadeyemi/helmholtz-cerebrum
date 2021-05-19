@@ -1,4 +1,4 @@
-package de.helmholtz.marketplace.cerebrum.entities;
+package de.helmholtz.marketplace.cerebrum.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,8 +11,8 @@ import org.neo4j.ogm.annotation.Relationship;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-import de.helmholtz.marketplace.cerebrum.entities.relationship.Affiliation;
-import de.helmholtz.marketplace.cerebrum.entities.relationship.Management;
+import de.helmholtz.marketplace.cerebrum.entity.relationship.Affiliation;
+import de.helmholtz.marketplace.cerebrum.entity.relationship.Management;
 
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)

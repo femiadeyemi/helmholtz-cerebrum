@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.helmholtz.marketplace.cerebrum.entities.Organization;
+import de.helmholtz.marketplace.cerebrum.entity.Organization;
 import de.helmholtz.marketplace.cerebrum.repository.OrganizationRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

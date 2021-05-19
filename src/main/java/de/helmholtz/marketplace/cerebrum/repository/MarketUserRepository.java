@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-import de.helmholtz.marketplace.cerebrum.entities.MarketUser;
+import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
 
 public interface MarketUserRepository extends Neo4jRepository<MarketUser, Long>
 {

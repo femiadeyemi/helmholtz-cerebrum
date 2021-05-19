@@ -1,4 +1,4 @@
-package de.helmholtz.marketplace.cerebrum.entities;
+package de.helmholtz.marketplace.cerebrum.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

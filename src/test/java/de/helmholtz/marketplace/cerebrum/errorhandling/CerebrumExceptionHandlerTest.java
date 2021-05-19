@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.helmholtz.marketplace.cerebrum.entities.Organization;
+import de.helmholtz.marketplace.cerebrum.entity.Organization;
 import de.helmholtz.marketplace.cerebrum.repository.OrganizationRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
