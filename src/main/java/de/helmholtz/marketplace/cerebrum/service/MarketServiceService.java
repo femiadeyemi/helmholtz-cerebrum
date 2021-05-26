@@ -3,39 +3,31 @@ package de.helmholtz.marketplace.cerebrum.service;
 import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.lang.reflect.Field;
-
 import de.helmholtz.marketplace.cerebrum.entity.MarketService;
-import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
 import de.helmholtz.marketplace.cerebrum.entity.Organization;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.Management;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.ServiceProvider;
+import de.helmholtz.marketplace.cerebrum.entity.Person;
 import de.helmholtz.marketplace.cerebrum.repository.MarketServiceRepository;
 import de.helmholtz.marketplace.cerebrum.service.common.CerebrumServiceBase;
-
-import static de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities.checkField;
 
 @Service
 public class MarketServiceService extends CerebrumServiceBase<MarketService, MarketServiceRepository>
 {
     private final MarketServiceRepository marketServiceRepository;
     private final OrganizationService organizationService;
-    private final MarketUserService marketUserService;
+    private final PersonService personService;
 
     public MarketServiceService(MarketServiceRepository marketServiceRepository,
                                 OrganizationService organizationService,
-                                MarketUserService marketUserService)
+                                PersonService personService)
     {
         super(MarketService.class, MarketServiceRepository.class);
         this.marketServiceRepository = marketServiceRepository;
         this.organizationService = organizationService;
-        this.marketUserService = marketUserService;
+        this.personService = personService;
     }
 
     public Page<MarketService> getServices(PageRequest page)
@@ -76,130 +68,68 @@ public class MarketServiceService extends CerebrumServiceBase<MarketService, Mar
     }
 
     //service-provider
-    public ResponseEntity<MarketService> addProvider(ServiceProvider serviceProvider)
+    public ResponseEntity<MarketService> addProvider(String serviceUuid, String providerUuid)
     {
-        MarketService inputService = serviceProvider.getMarketService();
-        Organization inputOrganization = serviceProvider.getOrganization();
+        return provider(serviceUuid, providerUuid, true);
+    }
 
-        if (inputService.getUuid() != null && inputOrganization.getUuid() != null) {
-            MarketService service = getServiceByAttributes("uuid", inputService.getUuid());
+    public ResponseEntity<MarketService> deleteProvider(String serviceUuid, String providerUuid)
+    {
+        return provider(serviceUuid, providerUuid, false);
+    }
 
-            if (service.getServiceProviders() != null) {
-                for (ServiceProvider provider : service.getServiceProviders()) {
-                    if (provider.equals(serviceProvider)) {
-                        return ResponseEntity.noContent().build();
-                    }
+    private ResponseEntity<MarketService> provider(String serviceUuid, String providerUuid, boolean toAdd)
+    {
+        MarketService service = getService(serviceUuid);
+        Organization provider = organizationService.getOrganization(providerUuid);
+
+        if (service.getServiceProviders() != null) {
+            for (Organization sp: service.getServiceProviders()) {
+                if (sp.getUuid().equals(providerUuid)) {
+                    return ResponseEntity.noContent().build();
                 }
             }
-            Organization organization = organizationService.getOrganization(inputOrganization.getUuid());
-            MarketService updatedService = marketServiceRepository.createHostedByRelationship(
-                    service.getUuid(), organization.getUuid(), serviceProvider.getServiceTechnicalName());
-            return ResponseEntity.ok().body(updatedService);
+        }
+
+        if (toAdd) {
+            service.addProvider(provider);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "The uuid of either or both service and organisation entity is not supplied. " +
-                            "Please check that the request body conform with the definition of " +
-                            "host class.");
+            service.removeProvider(provider);
         }
-    }
-
-    public ResponseEntity<MarketService> updateProvider(ServiceProvider serviceProvider)
-    {
-        MarketService serviceNode = serviceProvider.getMarketService();
-        Organization organizationNode = serviceProvider.getOrganization();
-
-        if (serviceNode.getUuid() != null && organizationNode.getUuid() != null) {
-            MarketService service = getServiceByAttributes("uuid", serviceNode.getUuid());
-
-            if (service.getServiceProviders() == null) {
-                return addProvider(serviceProvider);
-            }
-            for (ServiceProvider provider : service.getServiceProviders()) {
-                if (provider.getOrganization().getAbbreviation()
-                        .equals(organizationNode.getAbbreviation())) {
-                    MarketService updatedRelationship = marketServiceRepository.updateServiceProviderRelationship(
-                            service.getUuid(),
-                            provider.getOrganization().getUuid(),
-                            serviceProvider.getServiceTechnicalName());
-                    return ResponseEntity.ok().body(updatedRelationship);
-                }
-            }
-        }
-        return addProvider(serviceProvider);
-    }
-
-    public ResponseEntity<MarketService> deleteProviders(
-            String serviceKey, String serviceValue, String organizationKey, String organizationValue)
-    {
-        Boolean serviceFieldExist = checkField(serviceKey, MarketService.class);
-        Boolean organizationFieldExist = checkField(organizationKey, Organization.class);
-        if (serviceFieldExist && organizationFieldExist) {
-            MarketService service = getServiceByAttributes(serviceKey, serviceValue);
-            if (service.getServiceProviders() != null) {
-                for (ServiceProvider provider: service.getServiceProviders()) {
-                    try {
-                        Field field = Organization.class.getDeclaredField(organizationKey);
-                        field.setAccessible(true);
-                        if (field.get(provider.getOrganization()).equals(organizationValue)) {
-                            marketServiceRepository.deleteServiceProviders(
-                                    service.getUuid(), provider.getOrganization().getUuid());
-                            break;
-                        }
-                    } catch (IllegalAccessException | NoSuchFieldException e) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-                    }
-                }
-            }
-        }
-        return ResponseEntity.noContent().build();
+        MarketService updatedService = marketServiceRepository.save(service);
+        return ResponseEntity.ok().body(updatedService);
     }
 
     //Service Management Team
-    public ResponseEntity<MarketService> addTeamMember(Management management)
+    public ResponseEntity<MarketService> addTeamMember(String serviceUuid, String personUuid)
     {
-        MarketService inputService = management.getMarketService();
-        MarketUser inputUser = management.getMarketUser();
-
-        if (inputService.getUuid() != null && inputUser.getUuid() != null) {
-            MarketService service = getServiceByAttributes("uuid", inputService.getUuid());
-            if (service.getManagementTeam() != null) {
-                for (Management member : service.getManagementTeam()) {
-                    if (member.equals(management)) {
-                        return ResponseEntity.noContent().build();
-                    }
-                }
-            }
-            MarketUser user = marketUserService.getUser(inputUser.getUuid());
-            MarketService updatedService = marketServiceRepository.createManagesRelationship(
-                    service.getUuid(), user.getUuid(), management.getRoles());
-            return ResponseEntity.ok().body(updatedService);
-        }
-        return null;
+        return teamMember(serviceUuid, personUuid, true);
     }
 
-    public ResponseEntity<MarketService> deleteTeamMember(
-            String serviceKey, String serviceValue, String userKey, String userValue)
+    public ResponseEntity<MarketService> deleteTeamMember(String serviceUuid, String personUuid)
     {
-        Boolean serviceFieldExist = checkField(serviceKey, MarketService.class);
-        Boolean userFieldExist = checkField(userKey, MarketUser.class);
-        if (serviceFieldExist && userFieldExist) {
-            MarketService service = getServiceByAttributes(serviceKey, serviceValue);
-            if (service.getManagementTeam() != null) {
-                for (Management member : service.getManagementTeam()) {
-                    try {
-                        Field field = MarketUser.class.getDeclaredField(userKey);
-                        field.setAccessible(true);
-                        if (field.get(member.getMarketUser()).equals(userValue)) {
-                            marketServiceRepository.deleteManagementMember(
-                                    service.getUuid(), member.getMarketUser().getUuid());
-                            break;
-                        }
-                    } catch (IllegalAccessException | NoSuchFieldException e) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-                    }
+        return teamMember(serviceUuid, personUuid, false);
+    }
+
+    private ResponseEntity<MarketService> teamMember(String serviceUuid, String personUuid, boolean toAdd)
+    {
+        MarketService service = getService(serviceUuid);
+        Person teamMember = personService.getPerson(personUuid);
+
+        if (service.getManagementTeam() != null) {
+            for (Person tm: service.getManagementTeam()) {
+                if (tm.getUuid().equals(personUuid)) {
+                    return ResponseEntity.noContent().build();
                 }
             }
         }
-        return ResponseEntity.noContent().build();
+
+        if (toAdd) {
+            service.addTeamMember(teamMember);
+        } else {
+            service.removeTeamMember(teamMember);
+        }
+        MarketService updatedService = marketServiceRepository.save(service);
+        return ResponseEntity.ok().body(updatedService);
     }
 }

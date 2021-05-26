@@ -11,12 +11,8 @@ logging:
     org.springframework.web: INFO
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: DEBUG
-    org.springframework.data.neo4j.cypher: TRACE
     org.springframework.boot.autoconfigure: DEBUG
-    org.neo4j.driver.GraphDatabase: TRACE
-    org.neo4j.driver.Driver: TRACE
-    org.neo4j.driver.OutboundMessageHandler: TRACE
-    org.neo4j.driver.InboundMessageDispatcher: TRACE
+    org.springframework.data.mongodb: TRACE
 
 server:
   port: 8090
@@ -34,13 +30,6 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
-org:
-  neo4j:
-    driver:
-      uri: bolt://localhost:7687
-      authentication:
-        username: neo4j
-        password: test
 
 spring:
   application:

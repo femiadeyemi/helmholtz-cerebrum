@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
+import de.helmholtz.marketplace.cerebrum.entity.Person;
 import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -133,7 +134,7 @@ class MarketUserControllerTest
             e.printStackTrace();
         }
 
-        listUsers.sort(Comparator.comparing(MarketUser::getFirstName));
+        listUsers.sort(Comparator.comparing(MarketUser::getScreenName));
     }
 
     private MarketUser createNewUser(
@@ -145,13 +146,17 @@ class MarketUserControllerTest
     private MarketUser createNewUserWithUuiD(
             String email, String first, String last, String screenName, String sub, String uuid)
     {
+        Person p = new Person();
+        p.addEmail(email);
+        p.setFirstName(first);
+        p.setLastName(last);
+
         MarketUser usr = new MarketUser();
-        usr.setEmail(email);
-        usr.setFirstName(first);
-        usr.setLastName(last);
+        usr.setUuid(uuid);
         usr.setScreenName(screenName);
         usr.setSub(sub);
-        usr.setUuid(uuid);
+        usr.setProfile(p);
+
         return usr;
     }
 
@@ -315,11 +320,9 @@ class MarketUserControllerTest
     @Test void
     givenInValidPageValue_whenGetRequestToUsers_thenBadRequest() throws Exception
     {
-        Page<MarketUser> page = new PageImpl<>(listUsers);
-
         given(mockRepository
                 .findAll())
-                .willReturn(page);
+                .willReturn(listUsers);
 
         MockHttpServletResponse response = mvc.perform(
                 get(USR_API_URI +"?page=-1"))
@@ -385,7 +388,7 @@ class MarketUserControllerTest
     {
         //given
         listUsers.sort(Comparator.comparing(
-                MarketUser::getLastName, Comparator.reverseOrder()));
+                MarketUser::getScreenName, Comparator.reverseOrder()));
         Pageable pageable = PageRequest.of(
                 0,20, Sort.by(Sort.Order.desc("lastName")));
         Page<MarketUser> page = new PageImpl<>(listUsers, pageable,200L);
@@ -393,7 +396,7 @@ class MarketUserControllerTest
 
         //when
         mvc.perform(
-                get(USR_API_URI +"?sort=lastName.desc"))
+                get(USR_API_URI +"?sort=screenName.desc"))
 
                 //then
                 .andExpect(status().isOk())
@@ -428,7 +431,7 @@ class MarketUserControllerTest
                 .andExpect(header().exists("location"))
                 .andExpect(header().string("location",
                         containsString(USR_API_URI + "/" + usr.getUuid())))
-                .andExpect(jsonPath("$['firstName']").value(usr.getFirstName()))
+                .andExpect(jsonPath("$['sub']").value(usr.getSub()))
                 .andExpect(jsonPath("$['uuid']").value(usr.getUuid()));
 
         verify(mockRepository, times(1)).save(any(MarketUser.class));
@@ -451,7 +454,7 @@ class MarketUserControllerTest
                 .andExpect(header().exists("location"))
                 .andExpect(header().string("location",
                         containsString(USR_API_URI + "/usr-5189a7bc-d630-11ea-87d0-0242ac130003")))
-                .andExpect(jsonPath("$['firstName']").value(singleUser.getFirstName()))
+                .andExpect(jsonPath("$['screenName']").value(singleUser.getScreenName()))
                 .andExpect(jsonPath("$['uuid']")
                         .value("usr-5189a7bc-d630-11ea-87d0-0242ac130003"));
 
@@ -580,7 +583,7 @@ class MarketUserControllerTest
                 .andExpect(header().exists("location"))
                 .andExpect(header().string("location",
                         containsString(USR_API_URI + "/usr-5189a7bc-d630-11ea-87d0-0242ac130003")))
-                .andExpect(jsonPath("$['firstName']").value(singleUser.getFirstName()))
+                .andExpect(jsonPath("$['sub']").value(singleUser.getSub()))
                 .andExpect(jsonPath("$['uuid']").value("usr-5189a7bc-d630-11ea-87d0-0242ac130003"));
 
         verify(mockRepository, times(1)).save(any(MarketUser.class));
@@ -610,7 +613,7 @@ class MarketUserControllerTest
                 //then
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$['firstName']").value(singleUser.getFirstName()))
+                .andExpect(jsonPath("$['sub']").value(singleUser.getSub()))
                 .andExpect(jsonPath("$['uuid']").value("usr-5189a7bc-d630-11ea-87d0-0242ac130003"));
 
         verify(mockRepository, times(1)).save(any(MarketUser.class));

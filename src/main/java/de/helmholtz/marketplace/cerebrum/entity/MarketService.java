@@ -1,38 +1,36 @@
 package de.helmholtz.marketplace.cerebrum.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
-import de.helmholtz.marketplace.cerebrum.entity.relationship.Management;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
-@NodeEntity
+@Document
 public class MarketService extends AuditMetadata
 {
     @Schema(description = "Unique identifier of the market service.",
             example = "svc-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
     @Setter(AccessLevel.NONE)
-    @Id @GeneratedValue(strategy = CerebrumEntityUuidGenerator.class)
-    private String uuid;
+    @Id
+    private String uuid = generate("svc");
 
     @NotNull
     @Schema(description = "Name of a Service", example = "Sync+Share", required = true)
@@ -71,25 +69,64 @@ public class MarketService extends AuditMetadata
     private Phase phase;
 
     @Schema(description = "")
-    private List<String> targetGroup = new ArrayList<>();
+    private Set<String> targetGroup = new TreeSet<>();
 
     @Schema(description = "")
-    private List<String> tags = new ArrayList<>();
+    private Set<String> tags = new TreeSet<>();
 
     @Schema(description = "List of services provided by this organisation")
-    @JsonIgnoreProperties({"marketService"})
-    @Relationship(type = "HOSTED_BY")
-    private List<ServiceProvider> serviceProviders;
+    @DBRef
+    private List<Organization> serviceProviders = new ArrayList<>();
 
-    @JsonIgnoreProperties({"marketService"})
-    @Relationship(type = "MANAGES", direction = INCOMING)
-    private List<Management> managementTeam;
+    @Schema(description = "")
+    @DBRef
+    private List<Person> managementTeam = new ArrayList<>();
 
-    public void setUuid(String uuid)
+    public void setUuid(@Nullable String uuid)
     {
         this.uuid =  Boolean.TRUE.equals(
                 CerebrumEntityUuidGenerator.isValid(uuid))
-                ? uuid : generate("org");
+                ? uuid : generate("svc");
+    }
+
+    public void addTarget(String target)
+    {
+        targetGroup.add(target);
+    }
+
+    public void removeTarget(String target)
+    {
+        targetGroup.remove(target);
+    }
+
+    public void addTag(String tag)
+    {
+        tags.add(tag);
+    }
+
+    public void removeTag(String tag)
+    {
+        tags.remove(tag);
+    }
+
+    public void addProvider(Organization org)
+    {
+        serviceProviders.add(org);
+    }
+
+    public void removeProvider(Organization org)
+    {
+        serviceProviders.remove(org);
+    }
+
+    public void addTeamMember(Person member)
+    {
+        managementTeam.add(member);
+    }
+
+    public void removeTeamMember(Person member)
+    {
+        managementTeam.remove(member);
     }
 
     @Override

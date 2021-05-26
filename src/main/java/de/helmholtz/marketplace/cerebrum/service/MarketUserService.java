@@ -4,21 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.lang.reflect.Field;
 
 import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
 import de.helmholtz.marketplace.cerebrum.entity.Organization;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.Affiliation;
 import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
 import de.helmholtz.marketplace.cerebrum.service.common.CerebrumServiceBase;
-
-import static de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities.checkField;
 
 @Service
 public class MarketUserService extends CerebrumServiceBase<MarketUser, MarketUserRepository>
@@ -46,8 +39,8 @@ public class MarketUserService extends CerebrumServiceBase<MarketUser, MarketUse
 
     public MarketUser getUser(JsonNode user)
     {
-        //email and sub
-        return marketUserRepository.findByEmailAndSub(user.get("email").asText(), user.get("sub").asText());
+        //sub
+        return marketUserRepository.findBySub(user.get("sub").asText());
     }
 
     public MarketUser getUserByAttributes(String attr, String value)
@@ -83,55 +76,33 @@ public class MarketUserService extends CerebrumServiceBase<MarketUser, MarketUse
     }
 
     //affiliation
-    public ResponseEntity<MarketUser> addAffiliations(Affiliation affiliation)
+    public ResponseEntity<MarketUser> addAffiliation(String userUuid, String affiliationUuid)
     {
-        MarketUser inputUser = affiliation.getUser();
-        Organization inputOrganization = affiliation.getOrganization();
-
-        if (inputUser.getUuid() != null && inputOrganization.getUuid() != null) {
-            MarketUser user = getUserByAttributes("uuid", inputUser.getUuid());
-
-            if (user.getAffiliations() != null) {
-                for (Affiliation a : user.getAffiliations()) {
-                    if (a.equals(affiliation)) {
-                        return ResponseEntity.noContent().build();
-                    }
-                }
-            }
-            Organization organization = organizationService.getOrganization(inputOrganization.getUuid());
-            MarketUser updatedUser = marketUserRepository.createBelongsToRelationship(user.getUuid(),
-                    organization.getUuid(), affiliation.getStatus(), affiliation.getIsAContactPerson());
-            return ResponseEntity.ok().body(updatedUser);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "The uuid of either or both user and organisation entity is not supplied. " +
-                            "Please check that the request body conform with the definition of " +
-                            "affiliation class.");
-        }
+        return affiliation(userUuid, affiliationUuid, true);
     }
 
-    public ResponseEntity<MarketUser> deleteAffiliations(
-            String userKey, String userValue, String organizationKey, String organizationValue)
+    public ResponseEntity<MarketUser> deleteAffiliation(String userUuid, String affiliationUuid)
     {
-        Boolean userFieldExist = checkField(userKey, MarketUser.class);
-        Boolean organizationFieldExist = checkField(organizationKey, Organization.class);
-        if (userFieldExist && organizationFieldExist) {
-            MarketUser user = getUserByAttributes(userKey, userValue);
-            if (user.getAffiliations() != null) {
-                for (Affiliation a : user.getAffiliations()) {
-                    try {
-                        Field field = Organization.class.getDeclaredField(organizationKey);
-                        field.setAccessible(true);
-                        if (field.get(a.getOrganization()).equals(organizationValue)) {
-                            marketUserRepository.deleteAffiliations(user.getUuid(), a.getOrganization().getUuid());
-                            break;
-                        }
-                    } catch (IllegalAccessException | NoSuchFieldException e) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-                    }
+        return affiliation(userUuid, affiliationUuid, false);
+    }
+
+    private ResponseEntity<MarketUser> affiliation(String userUuid, String affiliationUuid, boolean toAdd)
+    {
+        MarketUser user = getUser(userUuid);
+        Organization affiliate = organizationService.getOrganization(affiliationUuid);
+        if (user.getAffiliations() != null) {
+            for (Organization a : user.getAffiliations()) {
+                if (a.getUuid().equals(affiliationUuid)) {
+                    return ResponseEntity.noContent().build();
                 }
             }
         }
-        return ResponseEntity.noContent().build();
+        if (toAdd) {
+            user.addAffiliation(affiliate);
+        } else {
+            user.removeAffiliation(affiliate);
+        }
+        MarketUser updatedUser = marketUserRepository.save(user);
+        return ResponseEntity.ok().body(updatedUser);
     }
 }

@@ -1,9 +1,9 @@
 package de.helmholtz.marketplace.cerebrum.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.neo4j.annotation.EnableNeo4jAuditing;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
 @Configuration(proxyBeanMethods = false)
-@EnableNeo4jAuditing
+@EnableMongoAuditing
 public class CerebrumDataConfig
 {}

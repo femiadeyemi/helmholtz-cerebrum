@@ -316,11 +316,9 @@ class MarketServiceControllerTest
     @Test void
     givenInValidPageValue_whenGetRequestToServices_thenBadRequest() throws Exception
     {
-        Page<MarketService> page = new PageImpl<>(services);
-
         given(mockRepository
                 .findAll())
-                .willReturn(page);
+                .willReturn(services);
 
         MockHttpServletResponse response = mvc.perform(
                 get(SVC_API_URI +"?page=-1"))

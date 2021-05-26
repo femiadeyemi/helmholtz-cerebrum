@@ -1,38 +1,31 @@
 package de.helmholtz.marketplace.cerebrum.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Objects;
 
-import de.helmholtz.marketplace.cerebrum.entity.relationship.Affiliation;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator;
 
 import static de.helmholtz.marketplace.cerebrum.utils.CerebrumEntityUuidGenerator.generate;
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 @Schema(name = "Organization", description = "POJO that represents a single organization entry.")
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
-@NodeEntity
+@Document
 public class Organization
 {
     @Schema(description = "Unique identifier of the organisation",
             example = "org-01eac6d7-0d35-1812-a3ed-24aec4231940", required = true)
     @Setter(AccessLevel.NONE)
-    @Id @GeneratedValue(strategy = CerebrumEntityUuidGenerator.class)
-    private String uuid;
+    @Id
+    private String uuid = generate("org");
 
     @Schema(description = "Name of the organisation in full",
             example = "Deutsches Elektronen-Synchrotron", required = true)
@@ -61,16 +54,6 @@ public class Organization
 
     @Schema(description = "", example = "HELMHOLTZ_CENTRE")
     private Type type;
-
-    @JsonIgnoreProperties({"organization"})
-    @Schema(description = "A list of Services which are provided by the organization")
-    @Relationship(type = "HOSTED_BY", direction = INCOMING)
-    private List<ServiceProvider> hostedServices;
-
-    @JsonIgnoreProperties("organization")
-    @Schema(description = "List of people that are affiliated with this organisation")
-    @Relationship(type = "BELONGS_TO", direction = INCOMING)
-    private List<Affiliation> members;
 
     public void setUuid(String uuid)
     {

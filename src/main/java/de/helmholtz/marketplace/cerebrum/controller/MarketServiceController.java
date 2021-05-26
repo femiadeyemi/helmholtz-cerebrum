@@ -1,5 +1,6 @@
 package de.helmholtz.marketplace.cerebrum.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jsonpatch.JsonPatch;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,8 +34,6 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 import de.helmholtz.marketplace.cerebrum.entity.MarketService;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.Management;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.ServiceProvider;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.MarketServiceService;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
@@ -185,53 +184,40 @@ public class MarketServiceController
     //serviceProvider
     @PreAuthorize("isAuthenticated()")
     @Operation(security = @SecurityRequirement(name = "hdf-aai"))
-    @PostMapping(path = "/providers",
+    @PostMapping(path = "/{uuid}/provider",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MarketService> addProvider(@Valid @RequestBody ServiceProvider provider)
+    public ResponseEntity<MarketService> addProvider(@PathVariable("uuid") String uuid,
+                                                     @Valid @RequestBody JsonNode provider)
     {
-        return marketServiceService.addProvider(provider);
+        return marketServiceService.addProvider(uuid, provider.get("uuid").asText());
     }
 
     @PreAuthorize("isAuthenticated()")
     @Operation(security = @SecurityRequirement(name = "hdf-aai"))
-    @PutMapping(path = "/providers",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MarketService> updateProvider(@Valid @RequestBody ServiceProvider provider)
+    @DeleteMapping(path = "/{uuid}/provider")
+    public ResponseEntity<MarketService> deleteProviders(@PathVariable("uuid") String uuid,
+                                                         @Valid @RequestBody JsonNode provider)
     {
-        return marketServiceService.updateProvider(provider);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @Operation(security = @SecurityRequirement(name = "hdf-aai"))
-    @DeleteMapping(path = "/affiliations")
-    public ResponseEntity<MarketService> deleteProviders(
-            @RequestParam String serviceKey,
-            @RequestParam String serviceValue,
-            @RequestParam String organizationKey,
-            @RequestParam String organizationValue)
-    {
-        return marketServiceService.deleteProviders(serviceKey, serviceValue, organizationKey, organizationValue);
+        return marketServiceService.deleteProvider(uuid, provider.get("uuid").asText());
     }
 
     //Management team
     @PreAuthorize("isAuthenticated()")
     @Operation(security = @SecurityRequirement(name = "hdf-aai"))
-    @PostMapping(path = "/management",
+    @PostMapping(path = "/{uuid}/management",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MarketService> addAffiliation(@Valid @RequestBody Management management)
+    public ResponseEntity<MarketService> addAffiliation(@PathVariable("uuid") String uuid,
+                                                        @Valid @RequestBody JsonNode teamMember)
     {
-        return marketServiceService.addTeamMember(management);
+        return marketServiceService.addTeamMember(uuid, teamMember.get("uuid").asText());
     }
 
     @PreAuthorize("isAuthenticated()")
     @Operation(security = @SecurityRequirement(name = "hdf-aai"))
-    @DeleteMapping(path = "/management")
-    public ResponseEntity<MarketService> deleteTeamMember(
-            @RequestParam String serviceKey,
-            @RequestParam String serviceValue,
-            @RequestParam String userKey,
-            @RequestParam String userValue)
+    @DeleteMapping(path = "/{uuid}/management")
+    public ResponseEntity<MarketService> deleteTeamMember(@PathVariable("uuid") String uuid,
+                                                          @Valid @RequestBody JsonNode teamMember)
     {
-        return marketServiceService.deleteTeamMember(serviceKey, serviceValue, userKey, userValue);
+        return marketServiceService.deleteTeamMember(uuid, teamMember.get("uuid").asText());
     }
 }

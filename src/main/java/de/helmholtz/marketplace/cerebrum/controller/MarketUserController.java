@@ -36,9 +36,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
-import de.helmholtz.marketplace.cerebrum.entity.relationship.Affiliation;
+import de.helmholtz.marketplace.cerebrum.entity.Person;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.MarketUserService;
+import de.helmholtz.marketplace.cerebrum.service.PersonService;
 import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
 
 @RestController
@@ -49,12 +50,15 @@ import de.helmholtz.marketplace.cerebrum.utils.CerebrumControllerUtilities;
 public class MarketUserController {
     private final WebClient authorisationServer;
     private final MarketUserService marketUserService;
+    private final PersonService personService;
 
     public MarketUserController(WebClient authorisationServer,
-                                MarketUserService marketUserService)
+                                MarketUserService marketUserService,
+                                PersonService personService)
     {
         this.authorisationServer = authorisationServer;
         this.marketUserService = marketUserService;
+        this.personService = personService;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -235,24 +239,21 @@ public class MarketUserController {
      */
     @PreAuthorize("isAuthenticated()")
     @Operation(security = @SecurityRequirement(name = "hdf-aai"))
-    @PostMapping(path = "/affiliations",
+    @PostMapping(path = "/{uuid}/affiliation",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MarketUser> addAffiliation(@Valid @RequestBody Affiliation affiliation)
+    public ResponseEntity<MarketUser> addAffiliation(@PathVariable(name = "uuid") String uuid,
+                                                     @Valid @RequestBody JsonNode affiliation)
     {
-        return marketUserService.addAffiliations(affiliation);
+        return marketUserService.addAffiliation(uuid, affiliation.get("uuid").asText());
     }
 
     @PreAuthorize("isAuthenticated()")
     @Operation(security = @SecurityRequirement(name = "hdf-aai"))
-    @DeleteMapping(path = "/affiliations")
-    public ResponseEntity<MarketUser> deleteAffiliations(
-            @RequestParam String userKey,
-            @RequestParam String userValue,
-            @RequestParam String organizationKey,
-            @RequestParam String organizationValue)
+    @DeleteMapping(path = "/{uuid}/affiliation")
+    public ResponseEntity<MarketUser> deleteAffiliation(@PathVariable(name = "uuid") String uuid,
+                                                         @Valid @RequestBody JsonNode affiliation)
     {
-        return marketUserService.deleteAffiliations(
-                userKey, userValue, organizationKey, organizationValue);
+        return marketUserService.deleteAffiliation(uuid, affiliation.get("uuid").asText());
     }
 
     private MarketUser checkAndAdd(@NotNull JsonNode user)
@@ -260,10 +261,18 @@ public class MarketUserController {
         MarketUser knownUser = marketUserService.getUser(user);
         if (knownUser == null) {
             MarketUser newUser = new MarketUser();
-            newUser.setFirstName(user.get("given_name").asText());
-            newUser.setLastName(user.get("family_name").asText());
+            Person p = personService.getPerson(user.get("given_name").asText(), user.get("family_name").asText());
+            if (p == null) {
+                Person newPerson = new Person();
+                newPerson.setFirstName(user.get("given_name").asText());
+                newPerson.setLastName(user.get("family_name").asText());
+                newPerson.addEmail(user.get("email").asText());
+                Person details = personService.createPerson(newPerson);
+                newUser.setProfile(details);
+            } else {
+                newUser.setProfile(p);
+            }
             newUser.setSub(user.get("sub").asText());
-            newUser.setEmail(user.get("email").asText());
             return marketUserService.createUser(newUser);
         }
         return knownUser;

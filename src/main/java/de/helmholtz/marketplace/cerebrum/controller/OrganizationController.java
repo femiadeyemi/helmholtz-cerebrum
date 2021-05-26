@@ -32,6 +32,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+import de.helmholtz.marketplace.cerebrum.entity.MarketService;
+import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
 import de.helmholtz.marketplace.cerebrum.entity.Organization;
 import de.helmholtz.marketplace.cerebrum.errorhandling.CerebrumApiError;
 import de.helmholtz.marketplace.cerebrum.service.OrganizationService;
@@ -189,5 +191,61 @@ public class OrganizationController {
             @PathVariable(name = "uuid") String uuid)
     {
         return organizationService.deleteOrganisation(uuid);
+    }
+
+    /* get list of hosted services */
+    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "get list of hosted services",
+            description = "A list of Services which are provided by the organization",
+            security = @SecurityRequirement(name = "hdf-aai"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation",
+                    content = @Content(array = @ArraySchema(
+                            schema = @Schema(implementation = MarketService.class)))),
+            @ApiResponse(responseCode = "401", description = "unauthorised", content = @Content())
+    })
+    @GetMapping(path = "/{uuid}/hosted-services")
+    public Iterable<MarketService> listHostedServices(
+            @PathVariable(name = "uuid") String uuid,
+            @Parameter(description = "specify the page number")
+            @RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
+            @Parameter(description = "limit the number of records returned in one page")
+            @RequestParam(value = "size", defaultValue = "20") @Min(1) Integer size,
+            @Parameter(description = "sort the fetched data in either ascending (asc) " +
+                    "or descending (desc) according to one or more of the service " +
+                    "properties. Eg. to sort the list in ascending order base on the " +
+                    "name property; the value will be set to name.asc")
+            @RequestParam(value = "sort", defaultValue = "name.asc") List<String> sorts)
+    {
+        return organizationService.getHostedServices(
+                uuid, PageRequest.of(page, size, Sort.by(CerebrumControllerUtilities.getOrders(sorts))));
+    }
+
+    /* get list of members */
+    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "get list of hosted services",
+            description = "List of people that are affiliated with this organisation",
+            security = @SecurityRequirement(name = "hdf-aai"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation",
+                    content = @Content(array = @ArraySchema(
+                            schema = @Schema(implementation = MarketUser.class)))),
+            @ApiResponse(responseCode = "401", description = "unauthorised", content = @Content())
+    })
+    @GetMapping(path = "/{uuid}/members")
+    public Iterable<MarketUser> listMembers(
+            @PathVariable(name = "uuid") String uuid,
+            @Parameter(description = "specify the page number")
+            @RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
+            @Parameter(description = "limit the number of records returned in one page")
+            @RequestParam(value = "size", defaultValue = "20") @Min(1) Integer size,
+            @Parameter(description = "sort the fetched data in either ascending (asc) " +
+                    "or descending (desc) according to one or more of the user " +
+                    "properties. Eg. to sort the list in ascending order base on the " +
+                    "profile property; the value will be set to profile.firstName.asc")
+            @RequestParam(value = "sort", defaultValue = "profile.firstName.asc") List<String> sorts)
+    {
+        return organizationService.listKnownMembers(uuid,
+                PageRequest.of(page, size, Sort.by(CerebrumControllerUtilities.getOrders(sorts))));
     }
 }

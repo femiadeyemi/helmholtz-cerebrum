@@ -7,7 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import de.helmholtz.marketplace.cerebrum.entity.MarketService;
+import de.helmholtz.marketplace.cerebrum.entity.MarketUser;
 import de.helmholtz.marketplace.cerebrum.entity.Organization;
+import de.helmholtz.marketplace.cerebrum.repository.MarketServiceRepository;
+import de.helmholtz.marketplace.cerebrum.repository.MarketUserRepository;
 import de.helmholtz.marketplace.cerebrum.repository.OrganizationRepository;
 import de.helmholtz.marketplace.cerebrum.service.common.CerebrumServiceBase;
 
@@ -15,11 +19,17 @@ import de.helmholtz.marketplace.cerebrum.service.common.CerebrumServiceBase;
 public class OrganizationService extends CerebrumServiceBase<Organization, OrganizationRepository>
 {
     private final OrganizationRepository organizationRepository;
+    private final MarketUserRepository marketUserRepository;
+    private final MarketServiceRepository marketServiceRepository;
 
-    public OrganizationService(OrganizationRepository organizationRepository)
+    public OrganizationService(OrganizationRepository organizationRepository,
+                               MarketUserRepository marketUserRepository,
+                               MarketServiceRepository marketServiceRepository)
     {
         super(Organization.class, OrganizationRepository.class);
         this.organizationRepository = organizationRepository;
+        this.marketUserRepository = marketUserRepository;
+        this.marketServiceRepository = marketServiceRepository;
     }
 
     public Page<Organization> getOrganizations(PageRequest page)
@@ -57,5 +67,15 @@ public class OrganizationService extends CerebrumServiceBase<Organization, Organ
     public ResponseEntity<Organization> deleteOrganisation(String uuid)
     {
         return deleteEntity(uuid, organizationRepository);
+    }
+
+    public Page<MarketService> getHostedServices(String uuid, PageRequest page)
+    {
+        return marketServiceRepository.findByServiceProvidersUsingUuid(uuid,  page);
+    }
+
+    public Page<MarketUser> listKnownMembers(String uuid, PageRequest page)
+    {
+        return marketUserRepository.findAllMembers(uuid,  page);
     }
 }

@@ -373,11 +373,9 @@ class OrganizationControllerTest
     @Test void
     givenInValidPageValue_whenGetRequestToOrganisations_thenBadRequest() throws Exception
     {
-        Page<Organization> page = new PageImpl<>(listOrganisation);
-
         given(mockRepository
                 .findAll())
-                .willReturn(page);
+                .willReturn(listOrganisation);
 
         MockHttpServletResponse response = mvc.perform(
                 get(ORG_API_URI +"?page=-1"))

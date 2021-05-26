@@ -1,7 +1,5 @@
 package de.helmholtz.marketplace.cerebrum.utils;
 
-import org.neo4j.ogm.id.IdStrategy;
-
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -11,13 +9,13 @@ import java.util.UUID;
 
 import de.helmholtz.marketplace.cerebrum.errorhandling.exception.CerebrumInvalidUuidException;
 
-public class CerebrumEntityUuidGenerator implements IdStrategy
+public class CerebrumEntityUuidGenerator
 {
     public enum PrefixEnum
     {
         ORGANIZATION("org", "organization"),
         HELMHOLTZMARKETUSER ("usr", "marketuser"),
-        PERSON ("usr", "person"),
+        PERSON ("prn", "person"),
         MARKETSERVICE ("svc", "marketservice");
 
         private final String prefix;
@@ -48,14 +46,6 @@ public class CerebrumEntityUuidGenerator implements IdStrategy
             if (!valid) throw new IllegalArgumentException(
                     "Prefix: '" + prefix +"' is unknown to cerebrum." );
         }
-    }
-
-    @Override
-    public Object generateId(Object entity)
-    {
-        String[] packages = entity.getClass().getName().split("\\.");
-        int length = packages.length;
-        return generate(PrefixEnum.getEntityPrefix(packages[length-1]));
     }
 
     public static synchronized String generate(String prefix)

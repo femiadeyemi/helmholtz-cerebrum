@@ -27,7 +27,6 @@
 		<hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
 		<dependency-check-maven.version>6.1.6</dependency-check-maven.version>
 		<dependency-check-maven.cvss-threshold>8</dependency-check-maven.cvss-threshold>
-		<neo4j-java-driver-spring-boot-starter.version>4.2.4.0</neo4j-java-driver-spring-boot-starter.version>
 		<nimbus-jose-jwt.version>7.9</nimbus-jose-jwt.version>
 		<!--suppress UnresolvedMavenProperty -->
 		<sonar.token>${env.SONAR_AUTH_TOKEN}</sonar.token>
@@ -46,12 +45,7 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-neo4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.neo4j.driver</groupId>
-			<artifactId>neo4j-java-driver-spring-boot-starter</artifactId>
-			<version>${neo4j-java-driver-spring-boot-starter.version}</version>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 
 		<dependency>

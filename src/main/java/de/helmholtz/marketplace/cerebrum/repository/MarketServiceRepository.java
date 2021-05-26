@@ -1,14 +1,16 @@
 package de.helmholtz.marketplace.cerebrum.repository;
 
-import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
 import de.helmholtz.marketplace.cerebrum.entity.MarketService;
 
-public interface MarketServiceRepository extends Neo4jRepository<MarketService, Long>
+public interface MarketServiceRepository extends MongoRepository<MarketService, String>
 {
     Optional<MarketService> findByUuid(String uuid);
 
@@ -16,42 +18,8 @@ public interface MarketServiceRepository extends Neo4jRepository<MarketService, 
 
     Optional<MarketService> findByEntryPoint(@Param("entryPoint") String url);
 
-    @Query("MATCH (service:MarketService),(org:Organization) " +
-            "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +
-            "CREATE (service)-[r:HOSTED_BY { serviceTechnicalName : $serviceTechnicalName }]->(org) " +
-            "RETURN service, r")
-    MarketService createHostedByRelationship(@Param("serviceUuid") String serviceUuid,
-                                           @Param("orgUuid") String orgUuid,
-                                           @Param("serviceTechnicalName") String serviceTechnicalName);
-
-    @Query("MATCH (service:MarketService),(user:MarketUser) " +
-            "WHERE service.uuid = $serviceUuid AND user.uuid = $orgUuid " +
-            "CREATE (user)-[r:MANAGES { roles : $roles }]->(service) " +
-            "RETURN service, r")
-    MarketService createManagesRelationship(@Param("serviceUuid") String serviceUuid,
-                                             @Param("orgUuid") String orgUuid,
-                                             @Param("roles") String[] roles);
-
-    @SuppressWarnings("UnusedReturnValue")
-    @Query("MATCH (service:MarketService)-[r:HOSTED_BY]->(org:Organization) " +
-            "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +
-            "SET r.serviceTechnicalName = $softwareName " +
-            "RETURN service")
-    MarketService updateServiceProviderRelationship(
-            @Param("serviceUuid") String serviceUuid,
-            @Param("orgUuid") String orgUuid, @Param("softwareName") String serviceTechnicalName);
-
-    @SuppressWarnings("UnusedReturnValue")
-    @Query("MATCH (service:MarketService)-[r:HOSTED_BY]->(org:Organization) " +
-            "WHERE service.uuid = $serviceUuid AND org.uuid = $orgUuid " +
-            "DELETE r")
-    Long deleteServiceProviders(@Param("serviceUuid") String serviceUuid, @Param("orgUuid") String orgUuid);
-
-    @SuppressWarnings("UnusedReturnValue")
-    @Query("MATCH (user:MarketUser)-[r:MANAGES]->(service:MarketService) " +
-            "WHERE service.uuid = $serviceUuid AND user.uuid = $userUuid " +
-            "DELETE r")
-    Long deleteManagementMember(@Param("serviceUuid") String serviceUuid, @Param("userUuid") String userUuid);
+    @Query(value = "{'serviceProviders.$id' : ?0 }", fields = "{'serviceProviders' : 0}")
+    Page<MarketService> findByServiceProvidersUsingUuid(String uuid, PageRequest pageRequest);
 
     @SuppressWarnings("UnusedReturnValue")
     Long deleteByUuid(String id);
